@@ -1,0 +1,152 @@
+@use "../colors/colors.scss" as *;
+@use "../mixins/mixins.scss" as *;
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $black 0%, $light-black 100%);
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: rgba($light-black, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba($border-white, 0.1);
+  border-bottom: 2px solid $gold;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  
+  .login-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    
+    .logotype-company {
+      width: 40px;
+      height: 40px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-image: url("/icons/logo.png");
+      filter: drop-shadow(0 0 10px rgba($gold, 0.5));
+    }
+    
+    & span {
+      @include font(1.5rem, 700);
+      color: $white;
+      letter-spacing: 1px;
+    }
+  }
+  
+  h1 {
+    @include font(1.5rem, 400);
+    color: $white;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .input-group {
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba($black, 0.5);
+      border: 1px solid rgba($border-white, 0.1);
+      border-radius: 12px;
+      color: $white;
+      @include font(1rem, 300);
+      transition: all 0.2s ease;
+      
+      &:focus {
+        outline: none;
+        border-color: $gold;
+        box-shadow: 0 0 0 2px rgba($gold, 0.2);
+      }
+      
+      &::placeholder {
+        color: rgba($gray, 0.5);
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+  
+  .error-message {
+    color: #ff6b6b;
+    @include font(0.9rem, 300);
+    text-align: center;
+    padding: 8px;
+    background: rgba(#ff6b6b, 0.1);
+    border-radius: 8px;
+  }
+  
+  button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, $gold, rgba($gold, 0.7));
+    border: none;
+    border-radius: 12px;
+    color: $black;
+    @include font(1rem, 600);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba($gold, 0.3);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    &.loading {
+      position: relative;
+      color: transparent;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: 50%;
+        left: 50%;
+        margin-left: -10px;
+        margin-top: -10px;
+        border: 2px solid $black;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spinner 0.8s linear infinite;
+      }
+    }
+  }
+  
+  .login-hint {
+    margin-top: 20px;
+    text-align: center;
+    
+    span {
+      @include font(0.8rem, 300);
+      color: rgba($gray, 0.5);
+    }
+  }
+}
+
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}

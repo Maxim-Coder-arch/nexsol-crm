@@ -1,0 +1,7 @@
+@use "../colors/colors.scss" as *;
+
+.main {
+  width: 100vw;
+  min-height: 100vh;
+  background-color: $black;
+}

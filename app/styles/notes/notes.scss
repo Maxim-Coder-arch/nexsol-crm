@@ -1,0 +1,311 @@
+@use '../colors/colors.scss' as *;
+@use '../mixins/mixins.scss' as *;
+
+.notes-page {
+  padding: 40px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, $light-black 100%);
+  
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+}
+
+.notes-header {
+  margin-bottom: 40px;
+  
+  h1 {
+    @include font(3rem, 700);
+    color: $white;
+    position: relative;
+    display: inline-block;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, $gold, transparent);
+      border-radius: 2px;
+    }
+  }
+  
+  p {
+    @include font(1.1rem, 300);
+    color: $gray;
+    margin-top: 20px;
+  }
+}
+
+.create-note-form {
+  background: rgba($light-black, 0.5);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 40px;
+  backdrop-filter: blur(10px);
+  
+  textarea {
+    width: 100%;
+    padding: 16px;
+    background: rgba($black, 0.5);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 12px;
+    color: $white;
+    @include font(1rem, 300);
+    resize: vertical;
+    margin-bottom: 16px;
+    
+    &:focus {
+      outline: none;
+      border-color: $gold;
+      box-shadow: 0 0 0 2px rgba($gold, 0.2);
+    }
+    
+    &::placeholder {
+      color: rgba($gray, 0.5);
+    }
+  }
+  
+  button {
+    padding: 12px 24px;
+    background: linear-gradient(90deg, $gold, rgba($gold, 0.7));
+    border: none;
+    border-radius: 30px;
+    color: $black;
+    @include font(1rem, 600);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba($gold, 0.3);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.note-card {
+  background: rgba($light-black, 0.5);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  
+  &:hover {
+    border-color: rgba($gold, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    
+    .note-actions {
+      opacity: 1;
+    }
+  }
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba($border-white, 0.1);
+  
+  .note-author {
+    @include font(1rem, 500);
+    color: $gold;
+    background: rgba($gold, 0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  
+  .note-date {
+    @include font(0.8rem, 300);
+    color: rgba($gray, 0.6);
+  }
+}
+
+.note-text {
+  @include font(1rem, 300);
+  color: $gray;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+}
+
+.note-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  
+  button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba($border-white, 0.1);
+    background: rgba($black, 0.5);
+    color: $gray;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    @include font(1.2rem, 400);
+    
+    &:hover {
+      transform: scale(1.1);
+    }
+    
+    &.edit-btn:hover {
+      border-color: $gold;
+      color: $gold;
+      background: rgba($gold, 0.1);
+    }
+    
+    &.delete-btn:hover {
+      border-color: #ff6b6b;
+      color: #ff6b6b;
+      background: rgba(#ff6b6b, 0.1);
+    }
+  }
+}
+
+.note-edit {
+  textarea {
+    width: 100%;
+    padding: 12px;
+    background: rgba($black, 0.5);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 8px;
+    color: $white;
+    @include font(0.95rem, 300);
+    resize: vertical;
+    margin-bottom: 12px;
+    
+    &:focus {
+      outline: none;
+      border-color: $gold;
+    }
+  }
+  
+  .edit-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    
+    button {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:first-child {
+        background: $gold;
+        color: $black;
+        
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba($gold, 0.3);
+        }
+      }
+      
+      &:last-child {
+        background: transparent;
+        border: 1px solid rgba($border-white, 0.3);
+        color: $gray;
+        
+        &:hover {
+          border-color: $gray;
+        }
+      }
+    }
+  }
+}
+
+.loading, .no-notes {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px;
+  color: $gray;
+  @include font(1.1rem, 300);
+  background: rgba($light-black, 0.3);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 16px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .notes-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .note-actions {
+    opacity: 1;
+  }
+}
+
+.form-row {
+  margin-bottom: 12px;
+}
+
+.author-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba($black, 0.5);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 12px;
+  color: $white;
+  @include font(1rem, 300);
+  
+  &:focus {
+    outline: none;
+    border-color: $gold;
+    box-shadow: 0 0 0 2px rgba($gold, 0.2);
+  }
+  
+  &::placeholder {
+    color: rgba($gray, 0.5);
+  }
+}
+
+.note-author-display {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: rgba($gold, 0.1);
+  border-radius: 8px;
+  
+  .author-label {
+    @include font(0.8rem, 300);
+    color: $gray;
+    margin-right: 8px;
+  }
+  
+  .author-name {
+    @include font(1rem, 500);
+    color: $gold;
+  }
+}
+
+.note-edited {
+  @include font(0.7rem, 300);
+  color: rgba($gray, 0.5);
+  margin-top: 4px;
+  text-align: right;
+}

@@ -1,0 +1,428 @@
+@use "../colors/colors.scss" as *;
+@use "../mixins/mixins.scss" as *;
+
+.dashboard {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(180deg, $light-black 0%, #0a0a0a 100%);
+  border-right: 1px solid rgba($border-white, 0.08);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+  z-index: 1000;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, 
+      transparent 0%,
+      $gold 20%,
+      $gold 80%,
+      transparent 100%
+    );
+    opacity: 0.3;
+  }
+}
+
+.dashboard-header {
+  padding: 0 20px 24px 20px;
+  border-bottom: 1px solid rgba($border-white, 0.08);
+}
+
+.dashboard-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  
+  .logotype-company {
+    width: 32px;
+    height: 32px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("/icons/logo.png");
+    filter: drop-shadow(0 0 8px rgba($gold, 0.3));
+  }
+  
+  & span {
+    @include font(1.2rem, 700);
+    color: $white;
+    letter-spacing: 0.5px;
+  }
+}
+
+.dashboard-date {
+  @include font(0.85rem, 300);
+  color: rgba($gray, 0.6);
+  /* Убираем фиксированный отступ */
+  padding-left: 0;
+  margin-left: 42px; /* Вместо padding используем margin, чтобы не влиять на ширину блока */
+}
+
+.dashboard-nav {
+  flex: 1;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  /* Убедимся, что навигация не имеет лишних отступов */
+  margin: 0;
+}
+
+.dashboard-nav-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  text-decoration: none;
+  color: $gray;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, rgba($gold, 0.1), transparent);
+    transition: width 0.3s ease;
+    z-index: -1;
+  }
+  
+  &:hover {
+    color: $gold;
+    padding-left: 24px;
+    
+    &::before {
+      width: 100%;
+    }
+    
+    .dashboard-nav-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+.dashboard-nav-label {
+  @include font(1rem, 400);
+  text-transform: lowercase;
+  letter-spacing: 0.3px;
+}
+
+.dashboard-nav-arrow {
+  @include font(1.2rem, 300);
+  color: $gold;
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: all 0.2s ease;
+}
+
+.dashboard-stats {
+  margin: 0 20px 24px 20px;
+  padding: 16px;
+  background: rgba($black, 0.3);
+  border: 1px solid rgba($border-white, 0.05);
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-around;
+  column-gap: 10px;
+  /* Убедимся, что внутри нет лишних отступов */
+  box-sizing: border-box;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  /* Убираем возможные стандартные отступы */
+  margin: 0;
+  padding: 0;
+}
+
+.stat-label {
+  @include font(0.7rem, 300);
+  color: rgba($gray, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  @include font(1.2rem, 700);
+  color: $gold;
+}
+
+.dashboard-footer {
+  padding: 24px 20px 0 20px;
+  border-top: 1px solid rgba($border-white, 0.08);
+}
+
+.team-members {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.team-member {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba($border-white, 0.05);
+  border: 1px solid rgba($border-white, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  
+  .member-initials {
+    @include font(0.9rem, 500);
+    color: $gray;
+  }
+  
+  &.add {
+    background: transparent;
+    border: 1px dashed rgba($gold, 0.3);
+    
+    & span {
+      color: $gold;
+      font-size: 1.2rem;
+    }
+    
+    &:hover {
+      border-color: $gold;
+      background: rgba($gold, 0.05);
+    }
+  }
+  
+  &:hover {
+    border-color: $gold;
+    transform: translateY(-2px);
+  }
+}
+
+.dashboard-version {
+  @include font(0.75rem, 300);
+  color: rgba($gray, 0.3);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    width: 240px;
+  }
+  
+  .dashboard-nav-label {
+    font-size: 0.9rem;
+  }
+  
+  .dashboard-logo span {
+    font-size: 1rem;
+  }
+  
+  .dashboard-date {
+    font-size: 0.75rem;
+    padding-left: 0;
+    margin-left: 42px;
+  }
+}
+
+/* Кнопка toggle (без изменений) */
+.dashboard-toggle {
+  position: fixed;
+  top: 20px;
+  left: 280px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(145deg, $light-black, #0a0a0a);
+  border: 1px solid rgba($border-white, 0.15);
+  border-left: 2px solid $gold;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1001;
+  box-shadow: 
+    0 5px 15px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba($gold, 0.1);
+  overflow: hidden;
+  transition: all 0.2s ease;
+  
+  /* Эффект стекла */
+  backdrop-filter: blur(8px);
+  
+  /* Золотой акцент при наведении */
+  &:hover {
+    border-color: $gold;
+    box-shadow: 
+      0 8px 20px rgba(0, 0, 0, 0.4),
+      0 0 0 2px rgba($gold, 0.2);
+    
+    .toggle-icon {
+      color: $gold;
+    }
+  }
+  
+  &.closed {
+    border-left: 2px solid rgba($gold, 0.5);
+    
+    .toggle-icon {
+      color: rgba($gold, 0.7);
+    }
+  }
+  
+  /* Иконка внутри */
+  .toggle-icon {
+    color: $gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: color 0.2s ease;
+    
+    svg {
+      width: 20px;
+      height: 20px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+  }
+  
+  /* Блик при наведении */
+  .toggle-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 30%, rgba($gold, 0.3), transparent 70%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+    
+    &.open {
+      left: 240px;
+    }
+    
+    &.closed {
+      left: 16px;
+    }
+  }
+}
+
+/* Анимация пульсации */
+@keyframes subtlePulse {
+  0% {
+    box-shadow: 
+      0 5px 15px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba($gold, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 5px 20px rgba($gold, 0.2),
+      0 0 0 2px rgba($gold, 0.2);
+  }
+  100% {
+    box-shadow: 
+      0 5px 15px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba($gold, 0.1);
+  }
+}
+
+.dashboard-toggle {
+  animation: subtlePulse 3s infinite ease-in-out;
+  
+  &:hover {
+    animation: none;
+  }
+}
+
+.dashboard-closed-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+  cursor: pointer;
+}
+
+.main-content {
+  transition: margin-left 0.3s ease;
+  margin-left: 280px;
+  
+  &.dashboard-closed {
+    margin-left: 0;
+  }
+}
+
+/* Блок с пользователем */
+.dashboard-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba($gold, 0.1);
+  border: 1px solid rgba($gold, 0.2);
+  border-radius: 30px;
+  width: fit-content;
+  
+  .user-greeting {
+    font-size: 1.1rem;
+  }
+  
+  .user-name {
+    @include font(0.9rem, 500);
+    color: $gold;
+    text-transform: lowercase;
+  }
+}
+
+/* Кнопка выхода */
+.logout-button {
+  width: 100%;
+  margin: 16px 0 8px;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 30px;
+  color: $gray;
+  @include font(0.9rem, 400);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    border-color: $gold;
+    color: $gold;
+    background: rgba($gold, 0.05);
+  }
+  
+  span:first-child {
+    font-size: 1rem;
+  }
+}

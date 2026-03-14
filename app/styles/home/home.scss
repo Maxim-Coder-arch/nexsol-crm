@@ -1,0 +1,336 @@
+@use "../colors/colors.scss" as *;
+@use "../mixins/mixins.scss" as *;
+
+.dashboard-main {
+  padding: 30px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, $light-black 100%);
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  h1 {
+    @include font(2.5rem, 700);
+    color: $white;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, $gold, transparent);
+      border-radius: 2px;
+    }
+  }
+
+  .dashboard-date {
+    @include font(1rem, 300);
+    color: rgba($gray, 0.6);
+    padding: 8px 16px;
+    background: rgba($black, 0.3);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 30px;
+    backdrop-filter: blur(5px);
+  }
+}
+
+.dashboard-section {
+  margin-bottom: 50px;
+
+  h2 {
+    @include font(1.8rem, 600);
+    color: $white;
+    margin-bottom: 25px;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: $gold;
+      border-radius: 2px;
+    }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background: rgba($light-black, 0.5);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: rgba($gold, 0.3);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  &.total {
+    border-left: 3px solid $blue;
+  }
+
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    background: rgba($gold, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+  }
+
+  .stat-content {
+    display: flex;
+    flex-direction: column;
+
+    .stat-label {
+      @include font(0.85rem, 300);
+      color: rgba($gray, 0.8);
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      @include font(1.8rem, 700);
+      color: $white;
+      line-height: 1;
+    }
+  }
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.chart-card {
+  background: rgba($light-black, 0.5);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+
+  h3 {
+    @include font(1.2rem, 500);
+    color: $white;
+    margin-bottom: 15px;
+  }
+}
+
+.finance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.finance-card {
+  background: rgba($light-black, 0.5);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+
+  h3 {
+    @include font(1.2rem, 500);
+    color: $white;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba($border-white, 0.1);
+    padding-bottom: 10px;
+  }
+
+  &.expenses .finance-item {
+    border-left: 2px solid #ff6b6b;
+  }
+
+  &.incomes .finance-item {
+    border-left: 2px solid $light-green;
+  }
+
+  &.profit {
+    background: linear-gradient(145deg, rgba($gold, 0.1), rgba($light-black, 0.5));
+    border-color: rgba($gold, 0.3);
+  }
+}
+
+.finance-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 5px;
+  background: rgba($black, 0.3);
+  border-radius: 8px;
+  
+  span:first-child {
+    color: $gray;
+  }
+  
+  span:last-child {
+    color: $white;
+    font-weight: 600;
+  }
+}
+
+.finance-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 10px 5px;
+  margin-top: 10px;
+  border-top: 1px solid rgba($border-white, 0.2);
+  font-weight: 700;
+  
+  span:last-child {
+    color: $gold;
+    font-size: 1.2rem;
+  }
+}
+
+.profit-value {
+  @include font(2.5rem, 800);
+  color: $gold;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.team-card {
+  background: rgba($light-black, 0.5);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba($gold, 0.3);
+    transform: translateY(-2px);
+  }
+
+  &.add {
+    border: 1px dashed rgba($gold, 0.3);
+    cursor: pointer;
+
+    &:hover {
+      background: rgba($gold, 0.05);
+    }
+  }
+}
+
+.team-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $gold, $blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: $black;
+}
+
+.team-info {
+  .team-name {
+    @include font(1.1rem, 600);
+    color: $white;
+  }
+
+  .team-role {
+    @include font(0.85rem, 300);
+    color: $gray;
+  }
+}
+
+.visitors-table {
+  overflow-x: auto;
+  background: rgba($light-black, 0.5);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      text-align: left;
+      padding: 12px;
+      color: $gold;
+      @include font(0.9rem, 500);
+      border-bottom: 1px solid rgba($border-white, 0.2);
+    }
+
+    td {
+      padding: 12px;
+      color: $gray;
+      @include font(0.85rem, 300);
+      border-bottom: 1px solid rgba($border-white, 0.05);
+    }
+
+    tr:hover td {
+      background: rgba($gold, 0.05);
+    }
+  }
+
+  .visitor-id, .user-agent {
+    font-family: monospace;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-main {
+    padding: 20px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .finance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+}
