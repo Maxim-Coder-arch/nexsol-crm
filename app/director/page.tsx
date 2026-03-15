@@ -17,9 +17,9 @@ export default function DirectorPage() {
       link: '/director/responsibilities',
     },
     {
-      title: 'Статистика',
-      description: 'Секретные метрики и аналитика',
-      link: '/director/stats',
+      title: 'Полезные ссылки',
+      description: 'Полезные ссылки и источники информации',
+      link: '/director/links',
     }
   ];
 

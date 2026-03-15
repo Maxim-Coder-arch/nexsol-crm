@@ -1,0 +1,276 @@
+@use '../colors/colors.scss' as *;
+@use '../mixins/mixins.scss' as *;
+
+.links {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $black 0%, $light-black 100%);
+  padding: 40px;
+  position: relative;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 50px;
+
+    h1 {
+      @include font(2.5rem, 600);
+      color: $white;
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 2px;
+        background: $gold;
+      }
+    }
+
+    p {
+      @include font(1rem, 300);
+      color: $gray;
+      margin-top: 20px;
+    }
+  }
+
+  &__form-container {
+    max-width: 600px;
+    margin: 0 auto 50px;
+  }
+
+  &__form {
+    background: rgba($light-black, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 4px;
+    padding: 30px;
+
+    h2 {
+      @include font(1.3rem, 500);
+      color: $white;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+  }
+
+  &__field {
+    margin-bottom: 20px;
+
+    label {
+      @include font(0.85rem, 400);
+      color: $gray;
+      display: block;
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba($black, 0.5);
+      border: 1px solid rgba($border-white, 0.1);
+      border-radius: 4px;
+      color: $white;
+      @include font(0.95rem, 300);
+
+      &:focus {
+        outline: none;
+        border-color: $gold;
+      }
+
+      &::placeholder {
+        color: rgba($gray, 0.3);
+      }
+    }
+
+    textarea {
+      resize: vertical;
+    }
+  }
+
+  &__importance-scale {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__importance-btn {
+    flex: 1;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid rgba($border-white, 0.2);
+    border-radius: 4px;
+    color: $gray;
+    @include font(0.9rem, 400);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $gold;
+      color: $gold;
+    }
+
+    &.active {
+      background: $gold;
+      border-color: $gold;
+      color: $black;
+    }
+  }
+
+  &__submit {
+    width: 100%;
+    padding: 12px;
+    background: $gold;
+    border: none;
+    border-radius: 4px;
+    color: $black;
+    @include font(1rem, 500);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: darken($gold, 10%);
+    }
+  }
+
+  &__list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__card {
+    background: rgba($light-black, 0.5);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 4px;
+    padding: 24px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: rgba($gold, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    &-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    &-title {
+      @include font(1.2rem, 500);
+      color: $white;
+      margin-bottom: 4px;
+    }
+
+    &-date {
+      @include font(0.75rem, 300);
+      color: rgba($gray, 0.4);
+    }
+
+    &-delete {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      background: transparent;
+      border: 1px solid rgba(#ff6b6b, 0.3);
+      color: #ff6b6b;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: #ff6b6b;
+        color: $white;
+      }
+    }
+
+    &-description {
+      @include font(0.95rem, 300);
+      color: $gray;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      padding: 12px;
+      background: rgba($black, 0.3);
+      border-radius: 4px;
+    }
+
+    &-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    &-link {
+      background: transparent;
+      border: none;
+      color: $gold;
+      @include font(0.9rem, 400);
+      cursor: pointer;
+      padding: 8px 0;
+      transition: all 0.2s ease;
+
+      &:hover {
+        opacity: 0.8;
+        transform: translateX(4px);
+      }
+    }
+
+    &-importance {
+      @include font(0.75rem, 400);
+      padding: 4px 10px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+
+      &.importance-5 {
+        background: #ff6b6b;
+        color: $black;
+      }
+      &.importance-4 {
+        background: $gold;
+        color: $black;
+      }
+      &.importance-3 {
+        background: rgba($gold, 0.5);
+        color: $black;
+      }
+      &.importance-2 {
+        background: rgba($gray, 0.2);
+        color: $gray;
+      }
+      &.importance-1 {
+        background: rgba($gray, 0.1);
+        color: rgba($gray, 0.6);
+      }
+    }
+  }
+
+  &__loading, &__empty {
+    text-align: center;
+    padding: 60px;
+    background: rgba($light-black, 0.3);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 4px;
+    color: $gray;
+    @include font(1rem, 300);
+  }
+
+  &__error {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ff6b6b;
+    color: $white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    @include font(0.9rem, 400);
+    z-index: 1000;
+  }
+}

@@ -7,8 +7,8 @@ const dashboard: IDashboard[] = [
     link: "/",
   },
   {
-    id: "home",
-    label: "Быстрый чат с nexsol ai",
+    id: "ai",
+    label: "Быстрый чат с ai",
     link: "/admins/nexsol-ai",
   },
   {
@@ -55,6 +55,11 @@ const dashboard: IDashboard[] = [
     id: 'ideas',
     label: "Идеи для бизнеса",
     link: "/admins/ideas",
+  },
+  {
+    id: 'website',
+    label: "Перейти на сайт nexsol",
+    link: "https://nexsol.vercel.app/",
   },
   {
     id: 'director',

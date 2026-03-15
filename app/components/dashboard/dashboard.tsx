@@ -287,17 +287,6 @@ const Dashboard = () => {
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.2, delay: 0.3 }}
             >
-              <div className="team-members">
-                <div className="team-member">
-                  <span className="member-initials">А</span>
-                </div>
-                <div className="team-member">
-                  <span className="member-initials">П</span>
-                </div>
-                <div className="team-member add">
-                  <span>+</span>
-                </div>
-              </div>
               
               <motion.button
                 className="logout-button"

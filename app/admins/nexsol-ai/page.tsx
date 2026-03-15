@@ -111,7 +111,7 @@ export default function ChatPage() {
                 <div className="chat__message-content">
                   <div className="chat__message-header">
                     <span className="chat__message-sender">
-                      {message.sender === 'ai' ? '🤖 AI' : '👤 Вы'}
+                      {message.sender === 'ai' ? 'Arcee' : 'Вы'}
                     </span>
                     <span className="chat__message-time">
                       {formatTime(message.timestamp)}
