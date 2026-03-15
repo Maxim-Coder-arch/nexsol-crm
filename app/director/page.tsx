@@ -1,0 +1,55 @@
+'use client';
+
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import "../styles/director/director.scss";
+
+export default function DirectorPage() {
+  const modules = [
+    {
+      title: 'Объявления',
+      description: 'Создавать и управлять объявлениями для команды',
+      link: '/director/announce',
+      icon: '📢'
+    },
+    {
+      title: 'Управление сайтом',
+      description: 'Редактировать контент главного сайта NEXSOL',
+      link: '/director/site',
+      icon: '🌐'
+    },
+    {
+      title: 'Статистика',
+      description: 'Секретные метрики и аналитика',
+      link: '/director/stats',
+      icon: '📊'
+    }
+  ];
+
+  return (
+    <div className="director">
+      <div className="director__header">
+        <h1>Панель директора</h1>
+        <p>Управление компанией и командой</p>
+      </div>
+
+      <div className="director__grid">
+        {modules.map((module, index) => (
+          <motion.div
+            key={module.title}
+            className="director__card"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+          >
+            <Link href={module.link}>
+              <div className="director__card-icon">{module.icon}</div>
+              <h3>{module.title}</h3>
+              <p>{module.description}</p>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}

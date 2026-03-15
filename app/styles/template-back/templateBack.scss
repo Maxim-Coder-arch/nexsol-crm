@@ -1,0 +1,15 @@
+@use "../colors/colors.scss" as *;
+@use "../mixins/mixins.scss" as *;
+
+.template-back {
+  position: fixed;
+  z-index: 1000;
+  top: 20px;
+  right: 20px;
+  padding: 5px 20px;
+  background-color: $light-background;
+  border: solid 1px $light-green;
+  color: $light-green;
+  @include font(0.9rem, 500);
+  border-radius: 5px;
+}

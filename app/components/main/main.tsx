@@ -73,8 +73,8 @@ const Main = () => {
   const [recentIncomes, setRecentIncomes] = useState<Income[]>([]);
 
   const team = [
-    { initials: 'М', name: 'Максим', role: 'Фронтенд разработчик, технический директор, тимлид' },
-    { initials: 'З', name: 'Захар', role: 'Маркетолог, менеджер, контент продюсер' },
+    { initials: 'М', name: 'Максим', role: 'Технический директор, фронтенд разработчик, тимлид' },
+    { initials: 'З', name: 'Захар', role: 'Sales, маркетолог, стратег' },
   ];
 
   useEffect(() => {
@@ -361,13 +361,6 @@ const Main = () => {
               </div>
             </div>
           ))}
-          <div className="team-card add">
-            <div className="team-avatar">+</div>
-            <div className="team-info">
-              <div className="team-name">Добавить</div>
-              <div className="team-role">нового участника</div>
-            </div>
-          </div>
         </div>
       </section>
 

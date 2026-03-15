@@ -211,9 +211,10 @@
 }
 
 .team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .team-card {
@@ -226,6 +227,7 @@
   gap: 15px;
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
+  max-width: 500px;
 
   &:hover {
     border-color: rgba($gold, 0.3);

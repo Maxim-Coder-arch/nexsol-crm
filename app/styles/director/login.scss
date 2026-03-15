@@ -1,0 +1,80 @@
+@use '../colors/colors.scss' as *;
+@use '../mixins/mixins.scss' as *;
+
+.director-login {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $black 0%, $light-black 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  &__card {
+    background: rgba($light-black, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 4px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+
+    h1 {
+      @include font(2rem, 600);
+      color: $white;
+      margin-bottom: 8px;
+    }
+
+    p {
+      @include font(1rem, 300);
+      color: $gray;
+      margin-bottom: 30px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba($black, 0.5);
+      border: 1px solid rgba($border-white, 0.1);
+      border-radius: 4px;
+      color: $white;
+      @include font(1rem, 300);
+      margin-bottom: 15px;
+
+      &:focus {
+        outline: none;
+        border-color: $gold;
+      }
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: $gold;
+      border: none;
+      border-radius: 4px;
+      color: $black;
+      @include font(1rem, 500);
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover:not(:disabled) {
+        background: darken($gold, 10%);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    .error {
+      color: #ff6b6b;
+      @include font(0.9rem, 300);
+      margin-bottom: 15px;
+      padding: 10px;
+      background: rgba(#ff6b6b, 0.1);
+      border-radius: 4px;
+    }
+  }
+}

@@ -67,6 +67,10 @@
   margin-left: 42px; /* Вместо padding используем margin, чтобы не влиять на ширину блока */
 }
 
+.active {
+  background-color: #d371f42a;
+}
+
 .dashboard-nav {
   flex: 1;
   padding: 24px 0;
@@ -431,4 +435,73 @@
   span:first-child {
     font-size: 1rem;
   }
+}
+
+.dashboard-nav-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  text-decoration: none;
+  color: $gray;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, rgba($gold, 0.1), transparent);
+    transition: width 0.3s ease;
+    z-index: -1;
+  }
+  
+  &:hover {
+    color: $gold;
+    padding-left: 24px;
+    
+    &::before {
+      width: 100%;
+    }
+  }
+  
+  &.active {
+    color: $gold;
+    border-left: 2px solid $gold;
+  }
+}
+
+.dashboard-nav-label {
+  @include font(1rem, 400);
+  text-transform: lowercase;
+  letter-spacing: 0.3px;
+}
+
+.dashboard-nav-arrow {
+  @include font(1.2rem, 300);
+  color: $gold;
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: all 0.2s ease;
+}
+
+/* Стили для счетчика */
+.dashboard-nav-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  background: $light-background;
+  border-radius: 12px;
+  color: $white;
+  @include font(0.6rem, 600);
+  line-height: 1;
+  transition: all 0.2s ease;
+  border: solid 1px $blue;
 }

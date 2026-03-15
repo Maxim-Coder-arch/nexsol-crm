@@ -3,10 +3,11 @@ import dashboard from "@/data/dashboard.data";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import "../../styles/dashboard/dashboard.scss";
 
 const Dashboard = () => {
+  const pathName = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [userName, setUserName] = useState<string>('');
   const [stats, setStats] = useState({
@@ -16,6 +17,13 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const toggleDashboard = () => setIsOpen(!isOpen);
+  const [counts, setCounts] = useState({
+    announcements: 0,
+    templates: 0,
+    notes: 0,
+    achievements: 0,
+    ideas: 0
+  });
   const getCookie = (name: string): string | null => {
     if (typeof document === 'undefined') return null;
     
@@ -26,6 +34,35 @@ const Dashboard = () => {
       return cookieValue || null;
     }
     return null;
+  };
+
+  const fetchCounts = async () => {
+    try {
+      
+      const [announcementsRes, templatesRes, notesRes, achievementsRes, ideasRes] = await Promise.all([
+        fetch('/api/director/announcements'),
+        fetch('/api/templates'),
+        fetch('/api/notes'),
+        fetch('/api/achievements'),
+        fetch('/api/ideas')
+      ]);
+
+      const announcements = await announcementsRes.json();
+      const templates = await templatesRes.json();
+      const notes = await notesRes.json();
+      const achievements = await achievementsRes.json();
+      const ideas = await ideasRes.json();
+
+      setCounts({
+        announcements: announcements.length || 0,
+        templates: templates.length || 0,
+        notes: notes.length || 0,
+        achievements: achievements.length || 0,
+        ideas: ideas.length || 0
+      });
+    } catch (error) {
+      console.error('❌ Failed to load counts:', error);
+    }
   };
 
   useEffect(() => {
@@ -63,6 +100,7 @@ const Dashboard = () => {
 
     fetchUserData();
     fetchStats();
+    fetchCounts();
     const interval = setInterval(fetchStats, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -160,23 +198,53 @@ const Dashboard = () => {
         </div>
 
         <nav className="dashboard-nav">
-          {dashboard.map((item, index) => (
-            <motion.div
-              key={item.label}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: isOpen ? 1 : 0, x: isOpen ? 0 : -20 }}
-              transition={{ duration: 0.2, delay: isOpen ? index * 0.03 : 0 }}
-            >
-              <Link href={item.link} className="dashboard-nav-item" onClick={toggleDashboard}>
-                <span className="dashboard-nav-label">
-                  {isOpen ? item.label : ''}
-                </span>
-                {isOpen && (
-                  <span className="dashboard-nav-arrow">→</span>
-                )}
-              </Link>
-            </motion.div>
-          ))}
+          {dashboard.map((item, index) => {
+            // Определяем, нужно ли показывать счетчик
+            const showCounter = [
+              'advertisements', 
+              'templates', 
+              'notes', 
+              'achievements', 
+              'ideas'
+            ].includes(item.id);
+            
+            // Получаем значение счетчика
+            const counterValue = 
+              item.id === 'advertisements' ? counts.announcements :
+              item.id === 'templates' ? counts.templates :
+              item.id === 'notes' ? counts.notes :
+              item.id === 'achievements' ? counts.achievements :
+              item.id === 'ideas' ? counts.ideas : 0;
+            
+            return (
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: isOpen ? 1 : 0, x: isOpen ? 0 : -20 }}
+                transition={{ duration: 0.2, delay: isOpen ? index * 0.03 : 0 }}
+              >
+                <Link 
+                  href={item.link} 
+                  className={"dashboard-nav-item" + (pathName === item.link ? ' active' : '')}
+                  onClick={toggleDashboard}
+                >
+                  <span className="dashboard-nav-label">
+                    {isOpen ? item.label : ''}
+                  </span>
+                  
+                  {isOpen && showCounter && counterValue > 0 && (
+                    <span className="dashboard-nav-counter">
+                      {counterValue}
+                    </span>
+                  )}
+                  
+                  {isOpen && !showCounter && (
+                    <span className="dashboard-nav-arrow">→</span>
+                  )}
+                </Link>
+              </motion.div>
+            );
+          })}
         </nav>
 
         <AnimatePresence mode="wait">
