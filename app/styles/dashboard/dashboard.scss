@@ -31,7 +31,7 @@
   }
 }
 
-.dashboard-header {
+.dashboard-header-left {
   padding: 0 20px 24px 20px;
   border-bottom: 1px solid rgba($border-white, 0.08);
 }
@@ -74,8 +74,14 @@
   flex-direction: column;
   gap: 4px;
   overflow-y: auto;
-  /* Убедимся, что навигация не имеет лишних отступов */
   margin: 0;
+  &::-webkit-scrollbar {
+    display: block;
+    width: 1px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $gold;
+  }
 }
 
 .dashboard-nav-item {

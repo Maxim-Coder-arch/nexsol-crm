@@ -1,7 +1,8 @@
-import clientPromise from '../../index';
+import clientPromise from '../..';
+import { ObjectId } from 'mongodb';
 
 export interface Note {
-  id: number;           // Простой числовой ID
+  _id?: ObjectId;
   author: string;
   text: string;
   createdAt: Date;
@@ -9,76 +10,57 @@ export interface Note {
 }
 
 export class NoteModel {
-  static async getCollection() {
+  static async create(author: string, text: string) {
     const client = await clientPromise;
     const db = client.db('nexsol');
-    return db.collection<Note>('notes');
-  }
-
-  // Получить следующий ID
-  static async getNextId(): Promise<number> {
-    const collection = await this.getCollection();
     
-    // Находим максимальный ID
-    const maxIdNote = await collection
-      .find()
-      .sort({ id: -1 })
-      .limit(1)
-      .toArray();
-    
-    return maxIdNote.length > 0 ? maxIdNote[0].id + 1 : 1;
-  }
-
-  // Создать заметку
-  static async create(author: string, text: string) {
-    const collection = await this.getCollection();
-    const now = new Date();
-    const nextId = await this.getNextId();
-    
-    const note = {
-      id: nextId,
+    const note: Note = {
       author,
       text,
-      createdAt: now,
-      updatedAt: now
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
     
-    await collection.insertOne(note);
-    return note;
+    const result = await db.collection<Note>('notes').insertOne(note);
+    return { ...note, _id: result.insertedId };
   }
 
-  // Получить все заметки
-  static async findAll() {
-    const collection = await this.getCollection();
-    return collection.find().sort({ createdAt: -1 }).toArray();
-  }
-
-  // Получить заметку по ID
-  static async findById(id: number) {
-    const collection = await this.getCollection();
-    return collection.findOne({ id });
-  }
-
-  // Обновить заметку
-  static async update(id: number, text: string) {
-    const collection = await this.getCollection();
+  static async getAll() {
+    const client = await clientPromise;
+    const db = client.db('nexsol');
     
-    const result = await collection.updateOne(
-      { id },
-      { 
-        $set: { 
-          text, 
-          updatedAt: new Date() 
-        } 
-      }
+    return await db
+      .collection<Note>('notes')
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+  }
+
+  static async getById(id: string) {
+    const client = await clientPromise;
+    const db = client.db('nexsol');
+    
+    return await db.collection<Note>('notes').findOne({ 
+      _id: new ObjectId(id) 
+    });
+  }
+
+  static async update(id: string, text: string) {
+    const client = await clientPromise;
+    const db = client.db('nexsol');
+    
+    return await db.collection<Note>('notes').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { text, updatedAt: new Date() } }
     );
-    
-    return result;
   }
 
-  // Удалить заметку
-  static async delete(id: number) {
-    const collection = await this.getCollection();
-    return collection.deleteOne({ id });
+  static async delete(id: string) {
+    const client = await clientPromise;
+    const db = client.db('nexsol');
+    
+    return await db.collection<Note>('notes').deleteOne({ 
+      _id: new ObjectId(id) 
+    });
   }
 }

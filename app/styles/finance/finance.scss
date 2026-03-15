@@ -1,0 +1,474 @@
+@use "../colors/colors.scss" as *;
+@use "../mixins/mixins.scss" as *;
+
+.finance-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, $light-black 100%);
+  padding: 40px;
+  position: relative;
+  overflow-x: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba($gold, 0.08), transparent 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+}
+
+.finance-header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 40px;
+
+  h1 {
+    @include font(3rem, 800);
+    color: $white;
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, $gold, transparent);
+    }
+  }
+
+  p {
+    @include font(1.2rem, 300);
+    color: $gray;
+    margin-top: 20px;
+  }
+}
+
+.totals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  .total-card {
+    background: rgba($light-black, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 24px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    &.income { 
+      border-bottom: 3px solid $light-green;
+      .total-value { color: $light-green; }
+    }
+    &.expense { 
+      border-bottom: 3px solid #ff6b6b;
+      .total-value { color: #ff6b6b; }
+    }
+    &.profit { 
+      border-bottom: 3px solid $gold;
+      .total-value { color: $gold; }
+    }
+
+    .total-label {
+      @include font(0.9rem, 300);
+      color: $gray;
+      display: block;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .total-value {
+      @include font(2.2rem, 700);
+      color: $white;
+    }
+  }
+}
+
+.chart-section {
+  background: rgba($light-black, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    h2 {
+      @include font(1.5rem, 600);
+      color: $white;
+    }
+
+    .chart-periods {
+      display: flex;
+      gap: 8px;
+      background: rgba($black, 0.3);
+      padding: 4px;
+      border-radius: 40px;
+      border: 1px solid rgba($border-white, 0.1);
+
+      button {
+        padding: 8px 20px;
+        background: transparent;
+        border: none;
+        border-radius: 30px;
+        color: $gray;
+        @include font(0.9rem, 400);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          color: $gold;
+        }
+
+        &.active {
+          background: rgba($gold, 0.15);
+          color: $gold;
+          border: 1px solid rgba($gold, 0.3);
+        }
+      }
+    }
+  }
+}
+
+.finance-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+
+  button {
+    padding: 12px 28px;
+    background: rgba($light-black, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 40px;
+    color: $gray;
+    @include font(1rem, 400);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $gold;
+      color: $gold;
+    }
+
+    &.active {
+      background: rgba($gold, 0.15);
+      color: $gold;
+      border-color: $gold;
+      font-weight: 500;
+    }
+  }
+}
+
+.finance-content {
+  position: relative;
+  z-index: 1;
+}
+
+.add-form {
+  background: rgba($light-black, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 24px;
+  padding: 30px;
+  margin-bottom: 30px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+
+  h3 {
+    @include font(1.5rem, 600);
+    color: $white;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+
+  input {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba($black, 0.5);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 16px;
+    color: $white;
+    @include font(1rem, 300);
+    margin-bottom: 15px;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $gold;
+      box-shadow: 0 0 0 3px rgba($gold, 0.2);
+    }
+
+    &::placeholder {
+      color: rgba($gray, 0.5);
+    }
+
+    &[type="date"] {
+      color-scheme: dark;
+    }
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg, $gold, rgba($gold, 0.8));
+    border: none;
+    border-radius: 40px;
+    color: $black;
+    @include font(1.1rem, 600);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba($gold, 0.4);
+    }
+  }
+}
+
+.rationality-input {
+  margin: 20px 0;
+
+  label {
+    @include font(0.9rem, 400);
+    color: $white;
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    background: rgba($border-white, 0.1);
+    border-radius: 4px;
+    outline: none;
+    margin: 15px 0;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: $gold;
+      cursor: pointer;
+      border: 3px solid $white;
+      box-shadow: 0 2px 15px rgba($gold, 0.5);
+    }
+  }
+
+  .rationality-scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+
+    span {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include font(0.9rem, 400);
+      color: rgba($gray, 0.5);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-radius: 50%;
+
+      &:hover {
+        color: $gold;
+        background: rgba($gold, 0.1);
+      }
+
+      &.active {
+        color: $gold;
+        font-weight: 600;
+        background: rgba($gold, 0.15);
+        border: 1px solid rgba($gold, 0.3);
+      }
+    }
+  }
+}
+
+.items-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.item-card {
+  background: rgba($light-black, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  position: relative;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: rgba($gold, 0.3);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  &.expense { border-left: 4px solid #ff6b6b; }
+  &.income { border-left: 4px solid $light-green; }
+  &.planned { border-left: 4px solid $gold; }
+
+  .delete-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba($black, 0.5);
+    border: 1px solid rgba(#ff6b6b, 0.5);
+    color: #ff6b6b;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+
+    &:hover {
+      background: #ff6b6b;
+      color: $white;
+      transform: scale(1.1);
+    }
+  }
+
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-right: 30px;
+
+    .item-author {
+      @include font(0.9rem, 500);
+      color: $gold;
+      background: rgba($gold, 0.1);
+      padding: 4px 12px;
+      border-radius: 30px;
+    }
+
+    .item-date {
+      @include font(0.8rem, 300);
+      color: rgba($gray, 0.6);
+      background: rgba($black, 0.3);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+  }
+
+  .item-description {
+    @include font(1rem, 300);
+    color: $white;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba($black, 0.2);
+    border-radius: 12px;
+  }
+
+  .item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid rgba($border-white, 0.1);
+
+    .item-amount {
+      @include font(1.3rem, 700);
+      
+      .expense & { color: #ff6b6b; }
+      .income & { color: $light-green; }
+      .planned & { color: $gold; }
+    }
+
+    .item-rationality {
+      padding: 5px 15px;
+      border-radius: 30px;
+      color: $black;
+      @include font(0.9rem, 600);
+    }
+  }
+}
+
+.loading, .no-items, .error {
+  text-align: center;
+  padding: 60px;
+  background: rgba($light-black, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 30px;
+  color: $gray;
+  @include font(1.1rem, 300);
+  grid-column: 1 / -1;
+}
+
+.error {
+  color: #ff6b6b;
+  border-color: rgba(#ff6b6b, 0.3);
+  background: rgba(#ff6b6b, 0.05);
+  margin-bottom: 20px;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+.loading {
+  animation: pulse 1.5s infinite ease-in-out;
+}

@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
 import { NoteModel } from '@/lib/mongodb/models/crm/note';
 
-// GET - получить все заметки
 export async function GET() {
   try {
-    const notes = await NoteModel.findAll();
+    const notes = await NoteModel.getAll();
     return NextResponse.json(notes);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch notes' },
       { status: 500 }
@@ -14,7 +13,6 @@ export async function GET() {
   }
 }
 
-// POST - создать заметку
 export async function POST(request: Request) {
   try {
     const { author, text } = await request.json();
@@ -27,11 +25,7 @@ export async function POST(request: Request) {
     }
     
     const note = await NoteModel.create(author, text);
-    
-    return NextResponse.json({ 
-      success: true, 
-      note 
-    });
+    return NextResponse.json({ success: true, note });
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to create note' },

@@ -6,8 +6,20 @@ const dashboard: IDashboard[] = [
     link: "/",
   },
   {
+    label: "Финансы",
+    link: "/admins/finance",
+  },
+  {
     label: "Воронки",
     link: "/admins/funnels",
+  },
+  {
+    label: "Калькуляторы",
+    link: "/admins/calculators",
+  },
+  {
+    label: "Текстовые шаблоны",
+    link: "/admins/text-templates",
   },
   {
     label: "Заметки",
@@ -18,24 +30,12 @@ const dashboard: IDashboard[] = [
     link: "/admins/achievements",
   },
   {
-    label: "Управление сайтом",
-    link: "/admins/website",
-  },
-  {
-    label: "Финансы",
-    link: "/admins/finance",
-  },
-  {
     label: "Идеи для бизнеса",
     link: "/admins/ideas",
   },
   {
-    label: "Шаблоны ответов",
-    link: "/admins/answers",
-  },
-  {
-    label: "Калькуляторы",
-    link: "/admins/calculators",
+    label: "Управление сайтом",
+    link: "/admins/website",
   },
 ];
 

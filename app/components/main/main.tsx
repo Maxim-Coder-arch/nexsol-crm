@@ -40,6 +40,23 @@ interface VisitorsByDay {
   [key: string]: number;
 }
 
+interface Expense {
+  amount: number;
+  description: string;
+  // другие поля не важны для сумм
+}
+
+interface Income {
+  amount: number;
+  description: string;
+}
+
+interface FinanceTotals {
+  expenses: number;
+  incomes: number;
+  profit: number;
+}
+
 const Main = () => {
   const [stats, setStats] = useState<StatsData | null>(null);
   const [visitors, setVisitors] = useState<Visitor[]>([]);
@@ -47,30 +64,56 @@ const Main = () => {
   const [weeklyData, setWeeklyData] = useState<ChartData[]>([]);
   const [monthlyData, setMonthlyData] = useState<ChartData[]>([]);
   const [yearlyData, setYearlyData] = useState<ChartData[]>([]);
+  const [financeTotals, setFinanceTotals] = useState<FinanceTotals>({
+    expenses: 0,
+    incomes: 0,
+    profit: 0
+  });
+  const [recentExpenses, setRecentExpenses] = useState<Expense[]>([]);
+  const [recentIncomes, setRecentIncomes] = useState<Income[]>([]);
 
   const team = [
-    { initials: 'М', name: 'Максим', role: 'Основатель' },
-    { initials: 'З', name: 'Захар', role: 'Маркетолог' },
+    { initials: 'М', name: 'Максим', role: 'Фронтенд разработчик, технический директор, тимлид' },
+    { initials: 'З', name: 'Захар', role: 'Маркетолог, менеджер, контент продюсер' },
   ];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsRes, visitorsRes, chartRes] = await Promise.all([
+        const [statsRes, visitorsRes, chartRes, expensesRes, incomesRes] = await Promise.all([
           fetch('/api/stats'),
           fetch('/api/visitors/recent?limit=10'),
-          fetch('/api/visitors/charts')
+          fetch('/api/visitors/charts'),
+          fetch('/api/finance/expenses'),
+          fetch('/api/finance/incomes')
         ]);
 
         const statsData = await statsRes.json();
         const visitorsData = await visitorsRes.json();
         const chartData = await chartRes.json();
+        const expensesData = await expensesRes.json();
+        const incomesData = await incomesRes.json();
 
         setStats(statsData);
         setVisitors(visitorsData);
         setWeeklyData(chartData.weekly || []);
         setMonthlyData(chartData.monthly || []);
         setYearlyData(chartData.yearly || []);
+
+        // Сохраняем последние 3 операции
+        setRecentExpenses(expensesData.slice(0, 3));
+        setRecentIncomes(incomesData.slice(0, 3));
+
+        // Считаем общие суммы
+        const totalExpenses = expensesData.reduce((sum: number, e: Expense) => sum + e.amount, 0);
+        const totalIncomes = incomesData.reduce((sum: number, i: Income) => sum + i.amount, 0);
+        
+        setFinanceTotals({
+          expenses: totalExpenses,
+          incomes: totalIncomes,
+          profit: totalIncomes - totalExpenses
+        });
+
       } catch (error) {
         console.error('Failed to load data:', error);
       } finally {
@@ -218,86 +261,93 @@ const Main = () => {
       </section>
 
       <section className="dashboard-section">
-        <h2>Финансы</h2>
-        <div className="finance-grid">
-          <div className="finance-card expenses">
-            <h3>Траты</h3>
-            <div className="finance-item">
-              <span>Фрилансеры</span>
-              <span>120 000 ₽</span>
-            </div>
-            <div className="finance-item">
-              <span>Сервисы</span>
-              <span>35 000 ₽</span>
-            </div>
-            <div className="finance-item">
-              <span>Налоги</span>
-              <span>45 000 ₽</span>
-            </div>
-            <div className="finance-item">
-              <span>Реклама</span>
-              <span>60 000 ₽</span>
-            </div>
-            <div className="finance-total">
-              <span>Итого</span>
-              <span>260 000 ₽</span>
-            </div>
+  <h2>Финансы</h2>
+  <div className="finance-grid">
+    {/* Траты */}
+    <div className="finance-card expenses">
+      <h3>Последние траты</h3>
+      {recentExpenses.length > 0 ? (
+        recentExpenses.map((expense, idx) => (
+          <div key={idx} className="finance-item">
+            <span>{expense.description}</span>
+            <span>{expense.amount.toLocaleString()} ₽</span>
           </div>
-
-          <div className="finance-card incomes">
-            <h3>Доходы</h3>
-            <div className="finance-item">
-              <span>Разработка</span>
-              <span>380 000 ₽</span>
-            </div>
-            <div className="finance-item">
-              <span>Реклама</span>
-              <span>120 000 ₽</span>
-            </div>
-            <div className="finance-item">
-              <span>Стратегии</span>
-              <span>90 000 ₽</span>
-            </div>
-            <div className="finance-item">
-              <span>Поддержка</span>
-              <span>45 000 ₽</span>
-            </div>
-            <div className="finance-total">
-              <span>Итого</span>
-              <span>635 000 ₽</span>
-            </div>
-          </div>
-
-          <div className="finance-card profit">
-            <h3>Общая прибыль</h3>
-            <div className="profit-value">
-              375 000 ₽
-            </div>
-            <div className="profit-chart">
-              <ResponsiveContainer width="100%" height={150}>
-                <PieChart>
-                  <Pie
-                    data={[
-                      { name: 'Прибыль', value: 375000 },
-                      { name: 'Расходы', value: 260000 }
-                    ]}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={40}
-                    outerRadius={60}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    <Cell fill="#f2c94c" />
-                    <Cell fill="#4a4a4a" />
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+        ))
+      ) : (
+        <div className="finance-item">
+          <span>Нет трат</span>
+          <span>0 ₽</span>
         </div>
-      </section>
+      )}
+      <div className="finance-total">
+        <span>Всего трат</span>
+        <span>{financeTotals.expenses.toLocaleString()} ₽</span>
+      </div>
+    </div>
+
+    {/* Доходы */}
+    <div className="finance-card incomes">
+      <h3>Последние доходы</h3>
+      {recentIncomes.length > 0 ? (
+        recentIncomes.map((income, idx) => (
+          <div key={idx} className="finance-item">
+            <span>{income.description}</span>
+            <span>{income.amount.toLocaleString()} ₽</span>
+          </div>
+        ))
+      ) : (
+        <div className="finance-item">
+          <span>Нет доходов</span>
+          <span>0 ₽</span>
+        </div>
+      )}
+      <div className="finance-total">
+        <span>Всего доходов</span>
+        <span>{financeTotals.incomes.toLocaleString()} ₽</span>
+      </div>
+    </div>
+
+    {/* Прибыль */}
+    <div className="finance-card profit">
+      <h3>Общая прибыль</h3>
+      <div className="profit-value">
+        {financeTotals.profit.toLocaleString()} ₽
+      </div>
+      <div className="profit-chart">
+        <ResponsiveContainer width="100%" height={150}>
+          <PieChart>
+            <Pie
+              data={[
+                { name: 'Прибыль', value: Math.max(financeTotals.profit, 0) },
+                { name: 'Расходы', value: financeTotals.expenses }
+              ]}
+              cx="50%"
+              cy="50%"
+              innerRadius={40}
+              outerRadius={60}
+              paddingAngle={5}
+              dataKey="value"
+            >
+              <Cell fill={financeTotals.profit >= 0 ? "#f2c94c" : "#ff0000"} />
+              <Cell fill="#e42525" />
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="finance-stats">
+        <div className="finance-stat">
+          <span>Доходы</span>
+          <span className="income-value">{financeTotals.incomes.toLocaleString()} ₽</span>
+        </div>
+        <div className="finance-stat">
+          <span>Расходы</span>
+          <span className="expense-value">{financeTotals.expenses.toLocaleString()} ₽</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
       <section className="dashboard-section">
         <h2>Команда</h2>

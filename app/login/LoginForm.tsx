@@ -49,10 +49,10 @@ export default function LoginForm() {
     >
       <div className="login-logo">
         <div className="logotype-company" />
-        <span>NEXSOL</span>
+        <span>NEXSOL CRM</span>
       </div>
       
-      <h1>Вход в панель управления</h1>
+      <h1>Вход в crm систему от NEXSOL</h1>
       
       <form onSubmit={handleSubmit}>
         <div className="input-group">

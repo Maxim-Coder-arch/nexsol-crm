@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import "../../styles/dashboard/dashboard.scss";
 
 const Dashboard = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [userName, setUserName] = useState<string>('');
   const [stats, setStats] = useState({
     unique: { today: 0, week: 0, month: 0 },
@@ -124,7 +124,7 @@ const Dashboard = () => {
           />
         )}
 
-        <div className="dashboard-header">
+        <div className="dashboard-header-left">
           <div className="dashboard-logo">
             <div className="logotype-company" />
             <AnimatePresence mode="wait">
@@ -135,7 +135,7 @@ const Dashboard = () => {
                   exit={{ opacity: 0, x: -10 }}
                   transition={{ duration: 0.2 }}
                 >
-                  NEXSOL
+                  NEXSOL CRM
                 </motion.span>
               )}
             </AnimatePresence>

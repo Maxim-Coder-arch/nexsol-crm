@@ -8,7 +8,7 @@ export default function LoginPage() {
         <div className="login-card">
           <div className="login-logo">
             <div className="logotype-company" />
-            <span>NEXSOL</span>
+            <span>NEXSOL CRM</span>
           </div>
           <h1>Загрузка...</h1>
         </div>
