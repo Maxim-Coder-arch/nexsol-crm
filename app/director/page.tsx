@@ -10,19 +10,16 @@ export default function DirectorPage() {
       title: 'Объявления',
       description: 'Создавать и управлять объявлениями для команды',
       link: '/director/announce',
-      icon: '📢'
     },
     {
-      title: 'Управление сайтом',
-      description: 'Редактировать контент главного сайта NEXSOL',
-      link: '/director/site',
-      icon: '🌐'
+      title: 'Обязанности',
+      description: 'Назначать обязанности команды',
+      link: '/director/responsibilities',
     },
     {
       title: 'Статистика',
       description: 'Секретные метрики и аналитика',
       link: '/director/stats',
-      icon: '📊'
     }
   ];
 
@@ -43,7 +40,6 @@ export default function DirectorPage() {
             transition={{ duration: 0.3, delay: index * 0.1 }}
           >
             <Link href={module.link}>
-              <div className="director__card-icon">{module.icon}</div>
               <h3>{module.title}</h3>
               <p>{module.description}</p>
             </Link>

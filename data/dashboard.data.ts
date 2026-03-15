@@ -7,6 +7,11 @@ const dashboard: IDashboard[] = [
     link: "/",
   },
   {
+    id: "home",
+    label: "Быстрый чат с nexsol ai",
+    link: "/admins/nexsol-ai",
+  },
+  {
     id: 'advertisements',
     label: "Объявления",
     link: "/admins/advertisements",
@@ -25,6 +30,11 @@ const dashboard: IDashboard[] = [
     id: 'calculators',
     label: "Калькуляторы",
     link: "/admins/calculators",
+  },
+  {
+    id: 'responsibilities',
+    label: "Обязанности",
+    link: "/admins/responsibilities",
   },
   {
     id: 'templates',
