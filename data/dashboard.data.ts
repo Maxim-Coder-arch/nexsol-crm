@@ -7,9 +7,24 @@ const dashboard: IDashboard[] = [
     link: "/",
   },
   {
+    id: "leads",
+    label: "Заявки",
+    link: "/admins/leads",
+  },
+  {
     id: "ai",
     label: "Быстрый чат с ai",
     link: "/admins/nexsol-ai",
+  },
+  {
+    id: 'time',
+    label: "Учет времени",
+    link: "/admins/time",
+  },
+  {
+    id: 'clients',
+    label: "База данных клиентов",
+    link: "/admins/clients",
   },
   {
     id: 'advertisements',

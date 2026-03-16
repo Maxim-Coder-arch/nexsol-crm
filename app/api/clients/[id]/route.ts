@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { LinkModel } from '@/lib/mongodb/models/crm/link';
+import { ClientModel } from '@/lib/mongodb/models/crm/clientCrm';
 import { ObjectId } from 'mongodb';
 
 export const dynamic = 'force-dynamic';
@@ -19,11 +19,11 @@ export async function DELETE(
       );
     }
     
-    const result = await LinkModel.delete(id);
+    const result = await ClientModel.delete(id);
     
     if (result.deletedCount === 0) {
       return NextResponse.json(
-        { error: 'Link not found' },
+        { error: 'Client not found' },
         { status: 404 }
       );
     }
@@ -31,7 +31,7 @@ export async function DELETE(
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to delete link' },
+      { error: 'Failed to delete client' },
       { status: 500 }
     );
   }
@@ -44,7 +44,7 @@ export async function PUT(
   const { id } = await params;
   
   try {
-    const { title, description, url, importance } = await request.json();
+    const data = await request.json();
     
     if (!ObjectId.isValid(id)) {
       return NextResponse.json(
@@ -53,11 +53,11 @@ export async function PUT(
       );
     }
     
-    const result = await LinkModel.update(id, { title, description, url, importance });
+    const result = await ClientModel.update(id, data);
     
     if (result.matchedCount === 0) {
       return NextResponse.json(
-        { error: 'Link not found' },
+        { error: 'Client not found' },
         { status: 404 }
       );
     }
@@ -65,7 +65,7 @@ export async function PUT(
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to update link' },
+      { error: 'Failed to update client' },
       { status: 500 }
     );
   }

@@ -22,7 +22,8 @@ const Dashboard = () => {
     templates: 0,
     notes: 0,
     achievements: 0,
-    ideas: 0
+    ideas: 0,
+    leads: 0,
   });
   const getCookie = (name: string): string | null => {
     if (typeof document === 'undefined') return null;
@@ -39,26 +40,29 @@ const Dashboard = () => {
   const fetchCounts = async () => {
     try {
       
-      const [announcementsRes, templatesRes, notesRes, achievementsRes, ideasRes] = await Promise.all([
-        fetch('/api/director/announcements'),
-        fetch('/api/templates'),
-        fetch('/api/notes'),
-        fetch('/api/achievements'),
-        fetch('/api/ideas')
-      ]);
+      const [announcementsRes, templatesRes, notesRes, achievementsRes, ideasRes, leadsRes] = await Promise.all([
+      fetch('/api/director/announcements'),
+      fetch('/api/templates'),
+      fetch('/api/notes'),
+      fetch('/api/achievements'),
+      fetch('/api/ideas'),
+      fetch('/api/leads/manage') // ← добавили заявки
+    ]);
 
       const announcements = await announcementsRes.json();
       const templates = await templatesRes.json();
       const notes = await notesRes.json();
       const achievements = await achievementsRes.json();
       const ideas = await ideasRes.json();
+      const leads = await leadsRes.json();
 
       setCounts({
         announcements: announcements.length || 0,
         templates: templates.length || 0,
         notes: notes.length || 0,
         achievements: achievements.length || 0,
-        ideas: ideas.length || 0
+        ideas: ideas.length || 0,
+        leads: leads.length || 0
       });
     } catch (error) {
       console.error('❌ Failed to load counts:', error);
@@ -205,7 +209,8 @@ const Dashboard = () => {
               'templates', 
               'notes', 
               'achievements', 
-              'ideas'
+              'ideas',
+              'leads'
             ].includes(item.id);
             
             // Получаем значение счетчика
@@ -214,8 +219,9 @@ const Dashboard = () => {
               item.id === 'templates' ? counts.templates :
               item.id === 'notes' ? counts.notes :
               item.id === 'achievements' ? counts.achievements :
-              item.id === 'ideas' ? counts.ideas : 0;
-            
+              item.id === 'ideas' ? counts.ideas : 
+              item.id === 'leads' ? counts.leads : 0;
+
             return (
               <motion.div
                 key={item.label}

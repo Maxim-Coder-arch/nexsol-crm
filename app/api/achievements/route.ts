@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { AchievementModel } from '@/lib/mongodb/models/crm/achievement';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   try {
     const achievements = await AchievementModel.getAll();

@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { IdeaModel } from '@/lib/mongodb/models/crm/idea';
 import { ObjectId } from 'mongodb';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }

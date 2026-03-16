@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { IdeaModel } from '@/lib/mongodb/models/crm/idea';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   try {
     const ideas = await IdeaModel.getAll();
