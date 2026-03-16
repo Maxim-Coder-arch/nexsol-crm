@@ -78,7 +78,7 @@ const dashboard: IDashboard[] = [
   },
   {
     id: 'director',
-    label: "Директор",
+    label: "Администрация",
     link: "/director",
   },
 ];

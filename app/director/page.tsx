@@ -7,6 +7,11 @@ import "../styles/director/director.scss";
 export default function DirectorPage() {
   const modules = [
     {
+      title: 'Воронки',
+      description: 'Разработка и проектирование воронок разных типов',
+      link: '/director/funnels',
+    },
+    {
       title: 'Объявления',
       description: 'Создавать и управлять объявлениями для команды',
       link: '/director/announce',

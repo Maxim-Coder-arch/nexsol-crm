@@ -26,14 +26,20 @@ export default function LoginForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, password }),
       });
+
       const data = await res.json();
+
       if (res.ok) {
-        router.push(from);
+        // Даем время кукам сохраниться
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Принудительная перезагрузка (самый надежный способ)
+        window.location.href = from;
+        // или router.push(from) + router.refresh()
       } else {
         setError(data.error || 'Login failed');
       }
     } catch (err) {
-      console.error('💥 Fetch error:', err);
       setError('Network error');
     } finally {
       setLoading(false);

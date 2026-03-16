@@ -25,6 +25,7 @@ const Dashboard = () => {
     ideas: 0,
     leads: 0,
   });
+
   const getCookie = (name: string): string | null => {
     if (typeof document === 'undefined') return null;
     
@@ -39,15 +40,14 @@ const Dashboard = () => {
 
   const fetchCounts = async () => {
     try {
-      
       const [announcementsRes, templatesRes, notesRes, achievementsRes, ideasRes, leadsRes] = await Promise.all([
-      fetch('/api/director/announcements'),
-      fetch('/api/templates'),
-      fetch('/api/notes'),
-      fetch('/api/achievements'),
-      fetch('/api/ideas'),
-      fetch('/api/leads/manage') // ← добавили заявки
-    ]);
+        fetch('/api/director/announcements'),
+        fetch('/api/templates'),
+        fetch('/api/notes'),
+        fetch('/api/achievements'),
+        fetch('/api/ideas'),
+        fetch('/api/leads/manage')
+      ]);
 
       const announcements = await announcementsRes.json();
       const templates = await templatesRes.json();
@@ -70,26 +70,23 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const fetchUserData = () => {
-      const userNameFromCookie = getCookie('nexsol_user');
-      
-      if (userNameFromCookie) {
-        try {
-          const decodedName = decodeURIComponent(userNameFromCookie);
-          console.log('✅ Имя после декодирования:', decodedName);
-          setUserName(decodedName);
-        } catch (e) {
-          console.error('Ошибка декодирования:', e);
-          setUserName(userNameFromCookie);
-        }
-      } else {
-        const allCookies = document.cookie.split('; ').reduce((acc, curr) => {
-          const [name, value] = curr.split('=');
-          acc[name] = value;
-          return acc;
-        }, {} as Record<string, string>);
+    // 1. Получаем имя пользователя из куки (один раз)
+    const userNameFromCookie = getCookie('nexsol_user');
+    
+    if (userNameFromCookie) {
+      try {
+        const decodedName = decodeURIComponent(userNameFromCookie);
+        console.log('✅ Имя из куки:', decodedName);
+        setUserName(decodedName);
+      } catch (e) {
+        console.error('Ошибка декодирования:', e);
+        setUserName(userNameFromCookie);
       }
-    };
+    } else {
+      console.log('❌ Кука nexsol_user не найдена');
+    }
+
+    // 2. Загружаем статистику
     const fetchStats = async () => {
       try {
         const response = await fetch('/api/stats');
@@ -102,23 +99,32 @@ const Dashboard = () => {
       }
     };
 
-    fetchUserData();
     fetchStats();
     fetchCounts();
+    
+    // 3. Обновляем статистику каждые 30 секунд
     const interval = setInterval(fetchStats, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, []); // ← пустой массив, выполнится только один раз при монтировании
+
   const handleLogout = async () => {
     try {
       const res = await fetch('/api/auth/logout', { 
         method: 'POST',
-        credentials: 'include'
+        credentials: 'include' // важно для отправки кук
       });
       
       if (res.ok) {
-        document.cookie = 'nexsol_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
-        document.cookie = 'nexsol_user=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
-        router.push('/login');
+        // Принудительно удаляем куки на клиенте (на всякий случай)
+        document.cookie = 'nexsol_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        document.cookie = 'nexsol_user=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        
+        // Очищаем состояние
+        setUserName('');
+        
+        // Редирект с полной перезагрузкой (важно для мобильных)
+        window.location.href = '/login';
+        // или router.push('/login') + router.refresh()
       }
     } catch (error) {
       console.error('Logout error:', error);

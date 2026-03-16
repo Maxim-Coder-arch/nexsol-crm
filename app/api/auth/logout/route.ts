@@ -1,17 +1,18 @@
 import { NextResponse } from 'next/server';
 
 export async function POST() {
-  console.log('🚪 Logout API called');
   
   const response = NextResponse.json({ success: true });
   
-  // Удаляем куки (ставим пустые значения и истекшее время)
+  // Удаляем куки с дополнительными параметрами для мобильных браузеров
   response.cookies.set({
     name: 'nexsol_auth',
     value: '',
     path: '/',
     expires: new Date(0),
     httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // важно для https
+    sameSite: 'lax', // или 'strict' для большей безопасности
   });
   
   response.cookies.set({
@@ -20,8 +21,9 @@ export async function POST() {
     path: '/',
     expires: new Date(0),
     httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
   });
   
-  console.log('🍪 Cookies deleted');
   return response;
 }

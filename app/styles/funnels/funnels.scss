@@ -2,276 +2,208 @@
 @use '../mixins/mixins.scss' as *;
 
 .funnels-page {
-  padding: 40px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0a0a 0%, $light-black 100%);
-  
-  @media (max-width: 768px) {
-    padding: 20px;
-  }
-}
+  background: linear-gradient(135deg, $black 0%, $light-black 100%);
+  padding: 40px;
 
-.funnels-header {
-  margin-bottom: 50px;
-  
-  h1 {
-    @include font(3rem, 700);
-    color: $white;
-    position: relative;
-    display: inline-block;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 0;
-      width: 80px;
-      height: 4px;
-      background: linear-gradient(90deg, $gold, transparent);
+  .funnels-header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    h1 {
+      @include font(2.5rem, 600);
+      color: $white;
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 2px;
+        background: $gold;
+      }
+    }
+
+    p {
+      @include font(1rem, 300);
+      color: $gray;
+      margin-top: 20px;
+    }
+  }
+
+  .funnels-filter {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+
+    &__btn {
+      padding: 8px 20px;
+      background: transparent;
+      border: 1px solid rgba($border-white, 0.2);
+      border-radius: 4px;
+      color: $gray;
+      @include font(0.95rem, 400);
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: $gold;
+        color: $gold;
+      }
+
+      &.active {
+        background: $gold;
+        border-color: $gold;
+        color: $black;
+      }
+    }
+  }
+
+  .funnels-list {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .funnels-item {
+    background: rgba($light-black, 0.5);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 4px;
+    padding: 30px;
+
+    &:hover {
+      border-color: rgba($gold, 0.3);
+    }
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+
+      h2 {
+        @include font(1.5rem, 500);
+        color: $white;
+        margin-bottom: 5px;
+      }
+    }
+
+    &__type {
+      @include font(0.85rem, 300);
+      color: $gold;
+      background: rgba($gold, 0.1);
+      padding: 2px 8px;
       border-radius: 2px;
     }
-  }
-  
-  p {
-    @include font(1.1rem, 300);
-    color: $gray;
-    margin-top: 20px;
-  }
-}
 
-.funnels-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 50px;
-  margin-bottom: 60px;
-}
+    &__date {
+      @include font(0.8rem, 300);
+      color: rgba($gray, 0.4);
+    }
 
-.funnel-section {
-  h2 {
-    @include font(2rem, 600);
-    color: $white;
-    margin-bottom: 25px;
-    position: relative;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: -8px;
-      width: 40px;
-      height: 2px;
-      background: $gold;
+    &__description {
+      @include font(1rem, 300);
+      color: $gray;
+      line-height: 1.5;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba($border-white, 0.1);
     }
   }
-}
 
-.funnel-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-.funnel-card {
-  background: rgba($light-black, 0.5);
-  border: 1px solid rgba($border-white, 0.1);
-  border-radius: 16px;
-  padding: 24px;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-  
-  &:hover {
-    border-color: $gold;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  }
-  
-  .card-header {
-    border-left: 3px solid;
-    padding-left: 12px;
-    margin-bottom: 16px;
-    
-    h3 {
-      @include font(1.3rem, 600);
-      color: $white;
-    }
-  }
-  
-  p {
-    @include font(0.95rem, 300);
-    color: $gray;
-    line-height: 1.5;
-    margin-bottom: 20px;
-  }
-}
-
-.funnel-progress {
-  .progress-bar {
-    height: 4px;
-    border-radius: 2px;
-    margin-bottom: 8px;
-  }
-  
-  span {
-    @include font(0.8rem, 400);
-    color: rgba($gray, 0.7);
-  }
-}
-
-.funnels-detailed {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  margin-bottom: 60px;
-  
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.detailed-section {
-  background: rgba($light-black, 0.5);
-  border: 1px solid rgba($border-white, 0.1);
-  border-radius: 24px;
-  padding: 30px;
-  backdrop-filter: blur(10px);
-  
-  h2 {
-    @include font(1.5rem, 600);
-    color: $white;
-    margin-bottom: 25px;
-  }
-}
-
-.funnel-stages {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.stage-item {
-  .stage-info {
+  .funnels-visual {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 8px;
-    
-    .stage-number {
-      @include font(1.2rem, 700);
-      color: $gold;
-      opacity: 0.5;
-      min-width: 40px;
+    gap: 12px;
+    margin-bottom: 30px;
+
+    &__stage {
+      border-left: 3px solid;
+      background: rgba($black, 0.3);
+      padding: 15px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba($gold, 0.05);
+      }
     }
-    
-    h3 {
-      @include font(1.1rem, 500);
+
+    &__stage-type {
+      @include font(0.7rem, 600);
+      color: $black;
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 2px;
+      margin-bottom: 6px;
+    }
+
+    &__stage-name {
+      @include font(1rem, 500);
       color: $white;
+      margin-bottom: 4px;
     }
-    
-    p {
+
+    &__stage-desc {
       @include font(0.85rem, 300);
       color: $gray;
     }
   }
-  
-  .stage-bar {
-    height: 8px;
-    background: rgba($border-white, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-    
-    .bar-fill {
-      height: 100%;
+
+  .funnels-stages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 1px solid rgba($border-white, 0.1);
+
+    &__item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: rgba($black, 0.3);
+      border: 1px solid rgba($border-white, 0.1);
       border-radius: 4px;
-      transition: width 0.3s ease;
     }
-  }
-}
 
-.funnel-visual {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
+    &__badge {
+      @include font(0.65rem, 600);
+      color: $black;
+      padding: 2px 4px;
+      border-radius: 2px;
+    }
 
-.funnel-block {
-  background: linear-gradient(90deg, rgba($gold, 0.2), rgba($blue, 0.2));
-  border: 1px solid rgba($gold, 0.3);
-  border-radius: 30px;
-  padding: 20px;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: scale(1.02);
-    border-color: $gold;
-  }
-  
-  .block-content {
-    h4 {
-      @include font(1rem, 500);
+    &__name {
+      @include font(0.85rem, 400);
       color: $white;
-      margin-bottom: 5px;
-    }
-    
-    p {
-      @include font(0.8rem, 300);
-      color: $gray;
     }
   }
-}
 
-.b2b-section {
-  background: rgba($light-black, 0.5);
-  border: 1px solid rgba($border-white, 0.1);
-  border-radius: 24px;
-  padding: 30px;
-  backdrop-filter: blur(10px);
-  
-  h2 {
-    @include font(1.5rem, 600);
-    color: $white;
-    margin-bottom: 25px;
+  .funnels-loading,
+  .funnels-error,
+  .funnels-empty {
+    text-align: center;
+    padding: 60px;
+    background: rgba($light-black, 0.3);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 4px;
+    color: $gray;
+    @include font(1rem, 300);
   }
-}
 
-.b2b-timeline {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-.timeline-item {
-  padding: 20px;
-  background: rgba($black, 0.3);
-  border-radius: 16px;
-  border-left: 3px solid $gold;
-  
-  .timeline-stage {
-    @include font(1.1rem, 500);
-    color: $white;
-    display: block;
-    margin-bottom: 8px;
-  }
-  
-  .timeline-duration {
-    @include font(0.9rem, 300);
-    color: $gold;
-    background: rgba($gold, 0.1);
-    padding: 4px 12px;
-    border-radius: 20px;
-  }
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-  .funnels-header h1 {
-    font-size: 2.5rem;
-  }
-  
-  .funnel-cards {
-    grid-template-columns: 1fr;
-  }
-  
-  .b2b-timeline {
-    grid-template-columns: 1fr;
+  .funnels-error {
+    color: #ff6b6b;
+    border-color: rgba(#ff6b6b, 0.3);
+    background: rgba(#ff6b6b, 0.05);
   }
 }

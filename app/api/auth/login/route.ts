@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       value: name,
       path: '/',
       maxAge: 60 * 60 * 24 * 7,
-      httpOnly: true,
+      httpOnly: false,
     });
     
     response.cookies.set({
@@ -42,7 +42,9 @@ export async function POST(req: Request) {
       path: '/',
       maxAge: 60 * 60 * 24 * 7,
       httpOnly: true,
+      secure: true,
     });
+    response.headers.set('Cache-Control', 'no-store, max-age=0');
     return response;
     
   } catch (error) {
