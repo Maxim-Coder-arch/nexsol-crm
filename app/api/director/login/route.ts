@@ -24,8 +24,9 @@ export async function POST(request: Request) {
         path: '/',
         maxAge: 60 * 60 * 24,
         httpOnly: true,
+        secure: true,
       });
-      
+      response.headers.set('Cache-Control', 'no-store, max-age=0');
       return response;
     }
     

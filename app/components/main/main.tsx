@@ -73,8 +73,10 @@ const Main = () => {
   const [recentIncomes, setRecentIncomes] = useState<Income[]>([]);
 
   const team = [
-    { initials: 'М', name: 'Максим', role: 'Технический директор, фронтенд разработчик, тимлид' },
-    { initials: 'З', name: 'Захар', role: 'Sales, маркетолог, стратег' },
+    { initials: 'М', name: 'Максим', role: 'Технический директор, фронтенд разработчик, тимлид, стратег' },
+    { initials: 'З', name: 'Захар', role: 'Sales, маркетолог, менеджер по продажам, стратег' },
+    { initials: 'А', name: 'Артем', role: 'Дата аналитик, контент менеджер, проектировщик' },
+    { initials: 'В', name: 'Возможный сотрудник', role: 'Командный помощник' },
   ];
 
   useEffect(() => {
