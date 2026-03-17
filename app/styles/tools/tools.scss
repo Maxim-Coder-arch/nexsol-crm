@@ -1,0 +1,156 @@
+@use "../colors/colors.scss" as *;
+@use "../mixins/mixins.scss" as *;
+
+.tools {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $black 0%, $light-black 100%);
+  padding: 40px;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    h1 {
+      @include font(2.5rem, 600);
+      color: $white;
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 2px;
+        background: $gold;
+      }
+    }
+
+    p {
+      @include font(1rem, 300);
+      color: $gray;
+      margin-top: 20px;
+    }
+  }
+
+  &__categories {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+
+  &__category-btn {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid rgba($border-white, 0.2);
+    border-radius: 4px;
+    color: $gray;
+    @include font(0.9rem, 400);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $gold;
+      color: $gold;
+    }
+
+    &.active {
+      background: $gold;
+      border-color: $gold;
+      color: $black;
+    }
+  }
+
+  &__list {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  &__card {
+    background: rgba($light-black, 0.5);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 4px;
+    padding: 20px;
+    text-decoration: none;
+    display: flex;
+    gap: 15px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      border-color: $gold;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    &-icon {
+      font-size: 2rem;
+      min-width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba($gold, 0.1);
+      border-radius: 4px;
+    }
+
+    &-content {
+      flex: 1;
+
+      h3 {
+        @include font(1.1rem, 500);
+        color: $white;
+        margin-bottom: 5px;
+      }
+
+      p {
+        @include font(0.9rem, 300);
+        color: $gray;
+        margin-bottom: 10px;
+        line-height: 1.4;
+      }
+    }
+
+    &-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.8rem;
+    }
+
+    &-category {
+      background: rgba($gold, 0.1);
+      color: $gold;
+      padding: 2px 8px;
+      border-radius: 2px;
+    }
+
+    &-author {
+      color: rgba($gray, 0.5);
+    }
+  }
+
+  &__loading, &__empty, &__error {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    background: rgba($light-black, 0.3);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 4px;
+    color: $gray;
+    @include font(1rem, 300);
+  }
+
+  &__error {
+    color: #ff6b6b;
+    border-color: rgba(#ff6b6b, 0.3);
+    background: rgba(#ff6b6b, 0.05);
+  }
+}

@@ -25,6 +25,11 @@ export default function DirectorPage() {
       title: 'Полезные ссылки',
       description: 'Полезные ссылки и источники информации',
       link: '/director/links',
+    },
+    {
+      title: 'Инструменты',
+      description: 'Полезные инструменты для работы',
+      link: '/director/tools',
     }
   ];
 

@@ -17,6 +17,9 @@ import {
 } from 'recharts';
 import "../../styles/home/home.scss";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface Visitor {
   _id: string;
   visitorId: string;

@@ -52,6 +52,11 @@ const dashboard: IDashboard[] = [
     link: "/admins/responsibilities",
   },
   {
+    id: 'tools',
+    label: "Инструменты",
+    link: "/admins/tools",
+  },
+  {
     id: 'templates',
     label: "Текстовые шаблоны",
     link: "/admins/text-templates",

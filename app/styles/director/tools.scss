@@ -1,0 +1,272 @@
+@use '../colors/colors.scss' as *;
+@use '../mixins/mixins.scss' as *;
+
+.director-tools {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $black 0%, $light-black 100%);
+  padding: 40px;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    h1 {
+      @include font(2.5rem, 600);
+      color: $white;
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 2px;
+        background: $gold;
+      }
+    }
+
+    p {
+      @include font(1rem, 300);
+      color: $gray;
+      margin-top: 20px;
+    }
+  }
+
+  &__action {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+
+  &__add-btn {
+    padding: 12px 32px;
+    background: transparent;
+    border: 1px solid $gold;
+    border-radius: 4px;
+    color: $gold;
+    @include font(1rem, 400);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $gold;
+      color: $black;
+    }
+  }
+
+  &__form {
+    max-width: 600px;
+    margin: 0 auto 40px;
+    background: rgba($light-black, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 4px;
+    padding: 30px;
+    overflow: hidden;
+
+    h2 {
+      @include font(1.3rem, 500);
+      color: $white;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+  }
+
+  &__field {
+    margin-bottom: 20px;
+
+    label {
+      @include font(0.85rem, 400);
+      color: $gray;
+      display: block;
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba($black, 0.5);
+      border: 1px solid rgba($border-white, 0.1);
+      border-radius: 4px;
+      color: $white;
+      @include font(0.95rem, 300);
+      transition: all 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $gold;
+        box-shadow: 0 0 0 2px rgba($gold, 0.1);
+      }
+
+      &::placeholder {
+        color: rgba($gray, 0.4);
+      }
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23aeaeae' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+    }
+  }
+
+  &__submit {
+    width: 100%;
+    padding: 12px;
+    background: $gold;
+    border: none;
+    border-radius: 4px;
+    color: $black;
+    @include font(1rem, 500);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+
+    &:hover {
+      background: darken($gold, 10%);
+    }
+  }
+
+  &__list {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+  }
+
+  &__card {
+    background: rgba($light-black, 0.5);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 4px;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: rgba($gold, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    &-icon {
+      font-size: 2rem;
+      min-width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba($gold, 0.1);
+      border-radius: 4px;
+    }
+
+    &-content {
+      flex: 1;
+    }
+
+    &-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+
+      h3 {
+        @include font(1.1rem, 500);
+        color: $white;
+        margin: 0;
+      }
+    }
+
+    &-delete {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      background: transparent;
+      border: 1px solid rgba(#ff6b6b, 0.3);
+      color: #ff6b6b;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background: #ff6b6b;
+        color: $white;
+      }
+    }
+
+    p {
+      @include font(0.9rem, 300);
+      color: $gray;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    a {
+      @include font(0.8rem, 300);
+      color: $gold;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 10px;
+      word-break: break-all;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      padding-top: 10px;
+      border-top: 1px solid rgba($border-white, 0.1);
+    }
+
+    &-category {
+      background: rgba($gold, 0.1);
+      color: $gold;
+      padding: 2px 8px;
+      border-radius: 2px;
+    }
+
+    &-author {
+      color: rgba($gray, 0.5);
+    }
+  }
+
+  &__loading, &__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    background: rgba($light-black, 0.3);
+    border: 1px solid rgba($border-white, 0.1);
+    border-radius: 4px;
+    color: $gray;
+    @include font(1rem, 300);
+  }
+
+  &__error {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ff6b6b;
+    color: $white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    @include font(0.9rem, 400);
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+}

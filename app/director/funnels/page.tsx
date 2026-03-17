@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import "../../styles/director/funnels.scss";
+import TemplateBack from '@/app/components/template/template';
 
 interface FunnelStage {
   id: string;
@@ -160,181 +161,184 @@ export default function DirectorFunnelsPage() {
   };
 
   return (
-    <div className="director-funnels">
-      <div className="director-funnels__header">
-        <h1>Конструктор воронок</h1>
-        <p>Создавайте и управляйте воронками продаж и привлечения</p>
-      </div>
+    <>
+      <TemplateBack />
+      <div className="director-funnels">
+        <div className="director-funnels__header">
+          <h1>Конструктор воронок</h1>
+          <p>Создавайте и управляйте воронками продаж и привлечения</p>
+        </div>
 
-      {/* Кнопка добавления */}
-      <div className="director-funnels__action">
-        <button 
-          className="director-funnels__add-btn"
-          onClick={() => setShowForm(!showForm)}
-        >
-          {showForm ? '−' : '+'} Новая воронка
-        </button>
-      </div>
-
-      {/* Форма создания */}
-      <AnimatePresence>
-        {showForm && (
-          <motion.form 
-            className="director-funnels__form"
-            onSubmit={handleSubmit}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+        {/* Кнопка добавления */}
+        <div className="director-funnels__action">
+          <button 
+            className="director-funnels__add-btn"
+            onClick={() => setShowForm(!showForm)}
           >
-            <h2>Новая воронка</h2>
+            {showForm ? '−' : '+'} Новая воронка
+          </button>
+        </div>
 
-            <div className="director-funnels__field">
-              <label>Название</label>
-              <input
-                type="text"
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-                placeholder="Например: B2B-воронка для сложных продаж"
-              />
-            </div>
+        {/* Форма создания */}
+        <AnimatePresence>
+          {showForm && (
+            <motion.form 
+              className="director-funnels__form"
+              onSubmit={handleSubmit}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+            >
+              <h2>Новая воронка</h2>
 
-            <div className="director-funnels__field">
-              <label>Описание</label>
-              <textarea
-                value={newDescription}
-                onChange={(e) => setNewDescription(e.target.value)}
-                placeholder="Для чего эта воронка"
-                rows={2}
-              />
-            </div>
-
-            <div className="director-funnels__field">
-              <label>Тип воронки</label>
-              <select value={newType} onChange={(e) => setNewType(e.target.value as any)}>
-                <option value="sales">Воронка продаж</option>
-                <option value="attraction">Воронка привлечения</option>
-                <option value="b2b">B2B воронка</option>
-              </select>
-            </div>
-
-            <div className="director-funnels__stages-header">
-              <h3>Этапы воронки</h3>
-              <button type="button" className="director-funnels__add-stage" onClick={addStage}>
-                + Добавить этап
-              </button>
-            </div>
-
-            {stages.map((stage, index) => (
-              <div key={stage.id} className="director-funnels__stage">
-                <div className="director-funnels__stage-header">
-                  <span className="director-funnels__stage-number">Этап {index + 1}</span>
-                  {stages.length > 1 && (
-                    <button 
-                      type="button"
-                      className="director-funnels__stage-remove"
-                      onClick={() => removeStage(stage.id)}
-                    >
-                      ×
-                    </button>
-                  )}
-                </div>
-
+              <div className="director-funnels__field">
+                <label>Название</label>
                 <input
                   type="text"
-                  placeholder="Название этапа"
-                  value={stage.name}
-                  onChange={(e) => updateStage(stage.id, 'name', e.target.value)}
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  placeholder="Например: B2B-воронка для сложных продаж"
                 />
+              </div>
 
-                <input
-                  type="text"
-                  placeholder="Описание этапа"
-                  value={stage.description}
-                  onChange={(e) => updateStage(stage.id, 'description', e.target.value)}
+              <div className="director-funnels__field">
+                <label>Описание</label>
+                <textarea
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  placeholder="Для чего эта воронка"
+                  rows={2}
                 />
+              </div>
 
-                <select
-                  value={stage.type}
-                  onChange={(e) => updateStage(stage.id, 'type', e.target.value)}
-                >
-                  <option value="tofu">TOFU — Осведомленность</option>
-                  <option value="mofu">MOFU — Интерес</option>
-                  <option value="bofu">BOFU — Действие</option>
+              <div className="director-funnels__field">
+                <label>Тип воронки</label>
+                <select value={newType} onChange={(e) => setNewType(e.target.value as any)}>
+                  <option value="sales">Воронка продаж</option>
+                  <option value="attraction">Воронка привлечения</option>
+                  <option value="b2b">B2B воронка</option>
                 </select>
               </div>
-            ))}
 
-            <button type="submit" className="director-funnels__submit">
-              Создать воронку
-            </button>
-          </motion.form>
-        )}
-      </AnimatePresence>
-
-      {/* Список воронок */}
-      <div className="director-funnels__list">
-        {loading ? (
-          <div className="director-funnels__loading">Загрузка...</div>
-        ) : funnels.length === 0 ? (
-          <div className="director-funnels__empty">Нет созданных воронок</div>
-        ) : (
-          funnels.map((funnel) => (
-            <motion.div
-              key={funnel._id}
-              className="director-funnels__card"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <div className="director-funnels__card-header">
-                <div>
-                  <h3>{funnel.name}</h3>
-                  <span className="director-funnels__card-type">
-                    {getFunnelTypeLabel(funnel.type)}
-                  </span>
-                </div>
-                <button
-                  className="director-funnels__card-delete"
-                  onClick={() => deleteFunnel(funnel._id)}
-                >
-                  ×
+              <div className="director-funnels__stages-header">
+                <h3>Этапы воронки</h3>
+                <button type="button" className="director-funnels__add-stage" onClick={addStage}>
+                  + Добавить этап
                 </button>
               </div>
 
-              <p className="director-funnels__card-description">{funnel.description}</p>
+              {stages.map((stage, index) => (
+                <div key={stage.id} className="director-funnels__stage">
+                  <div className="director-funnels__stage-header">
+                    <span className="director-funnels__stage-number">Этап {index + 1}</span>
+                    {stages.length > 1 && (
+                      <button 
+                        type="button"
+                        className="director-funnels__stage-remove"
+                        onClick={() => removeStage(stage.id)}
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
 
-              {/* Визуализация воронки */}
-              <div className="director-funnels__visualization">
-                {funnel.stages.sort((a, b) => a.order - b.order).map((stage, idx) => (
-                  <div 
-                    key={stage.id}
-                    className="director-funnels__stage-visual"
-                    style={{ width: `${getStageWidth(idx, funnel.stages.length)}%` }}
+                  <input
+                    type="text"
+                    placeholder="Название этапа"
+                    value={stage.name}
+                    onChange={(e) => updateStage(stage.id, 'name', e.target.value)}
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Описание этапа"
+                    value={stage.description}
+                    onChange={(e) => updateStage(stage.id, 'description', e.target.value)}
+                  />
+
+                  <select
+                    value={stage.type}
+                    onChange={(e) => updateStage(stage.id, 'type', e.target.value)}
                   >
-                    <div className={`director-funnels__stage-type ${stage.type}`}>
-                      {stage.type.toUpperCase()}
-                    </div>
-                    <div className="director-funnels__stage-name">{stage.name}</div>
-                    <div className="director-funnels__stage-desc">{stage.description}</div>
-                  </div>
-                ))}
-              </div>
+                    <option value="tofu">TOFU — Осведомленность</option>
+                    <option value="mofu">MOFU — Интерес</option>
+                    <option value="bofu">BOFU — Действие</option>
+                  </select>
+                </div>
+              ))}
 
-              <div className="director-funnels__stages-list">
-                {funnel.stages.sort((a, b) => a.order - b.order).map((stage) => (
-                  <div key={stage.id} className="director-funnels__stage-item">
-                    <span className={`director-funnels__stage-badge ${stage.type}`}>
-                      {stage.type.toUpperCase()}
+              <button type="submit" className="director-funnels__submit">
+                Создать воронку
+              </button>
+            </motion.form>
+          )}
+        </AnimatePresence>
+
+        {/* Список воронок */}
+        <div className="director-funnels__list">
+          {loading ? (
+            <div className="director-funnels__loading">Загрузка...</div>
+          ) : funnels.length === 0 ? (
+            <div className="director-funnels__empty">Нет созданных воронок</div>
+          ) : (
+            funnels.map((funnel) => (
+              <motion.div
+                key={funnel._id}
+                className="director-funnels__card"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <div className="director-funnels__card-header">
+                  <div>
+                    <h3>{funnel.name}</h3>
+                    <span className="director-funnels__card-type">
+                      {getFunnelTypeLabel(funnel.type)}
                     </span>
-                    <span className="director-funnels__stage-name">{stage.name}</span>
                   </div>
-                ))}
-              </div>
-            </motion.div>
-          ))
-        )}
-      </div>
+                  <button
+                    className="director-funnels__card-delete"
+                    onClick={() => deleteFunnel(funnel._id)}
+                  >
+                    ×
+                  </button>
+                </div>
 
-      {error && <div className="director-funnels__error">{error}</div>}
-    </div>
+                <p className="director-funnels__card-description">{funnel.description}</p>
+
+                {/* Визуализация воронки */}
+                <div className="director-funnels__visualization">
+                  {funnel.stages.sort((a, b) => a.order - b.order).map((stage, idx) => (
+                    <div 
+                      key={stage.id}
+                      className="director-funnels__stage-visual"
+                      style={{ width: `${getStageWidth(idx, funnel.stages.length)}%` }}
+                    >
+                      <div className={`director-funnels__stage-type ${stage.type}`}>
+                        {stage.type.toUpperCase()}
+                      </div>
+                      <div className="director-funnels__stage-name">{stage.name}</div>
+                      <div className="director-funnels__stage-desc">{stage.description}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="director-funnels__stages-list">
+                  {funnel.stages.sort((a, b) => a.order - b.order).map((stage) => (
+                    <div key={stage.id} className="director-funnels__stage-item">
+                      <span className={`director-funnels__stage-badge ${stage.type}`}>
+                        {stage.type.toUpperCase()}
+                      </span>
+                      <span className="director-funnels__stage-name">{stage.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))
+          )}
+        </div>
+
+        {error && <div className="director-funnels__error">{error}</div>}
+      </div>
+    </>
   );
 }
