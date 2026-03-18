@@ -1,0 +1,131 @@
+@use "../colors/colors.scss" as *;
+@use "../mixins/mixins.scss" as *;
+
+.documentation {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $black 0%, $light-black 100%);
+  padding: 40px;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 50px;
+
+    h1 {
+      @include font(2.8rem, 600);
+      color: $white;
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 2px;
+        background: $gold;
+      }
+    }
+
+    p {
+      @include font(1.2rem, 300);
+      color: $gray;
+      margin-top: 20px;
+    }
+  }
+
+  &__content {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
+.doc-section {
+  &__title {
+    @include font(1.8rem, 500);
+    color: $white;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba($border-white, 0.1);
+    padding-bottom: 10px;
+  }
+}
+
+.doc-card {
+  background: rgba($light-black, 0.5);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 4px;
+  padding: 24px;
+  margin-bottom: 20px;
+
+  &:hover {
+    border-color: rgba($gold, 0.3);
+  }
+
+  h3 {
+    @include font(1.3rem, 500);
+    color: $gold;
+    margin-bottom: 15px;
+  }
+
+  h4 {
+    @include font(1rem, 500);
+    color: $white;
+    margin: 15px 0 8px;
+  }
+
+  p {
+    @include font(0.95rem, 300);
+    color: $gray;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  &--important {
+    border-left: 3px solid $gold;
+    background: rgba($gold, 0.05);
+  }
+}
+
+.doc-list {
+  @include font(0.95rem, 300);
+  color: $gray;
+  padding-left: 20px;
+  margin: 10px 0;
+
+  li {
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+
+  &--numbered {
+    list-style-type: decimal;
+  }
+
+  strong {
+    color: $gold;
+    font-weight: 400;
+  }
+}
+
+.doc-note {
+  @include font(0.85rem, 300);
+  color: rgba($gold, 0.7);
+  font-style: italic;
+  margin-bottom: 15px;
+}
+
+.doc-footer {
+  margin-top: 50px;
+  padding-top: 20px;
+  border-top: 1px solid rgba($border-white, 0.1);
+  text-align: center;
+
+  p {
+    @include font(0.8rem, 300);
+    color: rgba($gray, 0.5);
+  }
+}

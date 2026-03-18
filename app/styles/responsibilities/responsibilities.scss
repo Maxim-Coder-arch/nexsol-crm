@@ -172,3 +172,48 @@
     background: rgba(#ff6b6b, 0.05);
   }
 }
+
+.team-responsibilities__role {
+  @include font(0.85rem, 400);
+  color: $gold;
+  background: rgba($gold, 0.1);
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-left: 10px;
+}
+
+.team-responsibilities__section {
+  margin: 20px 0;
+
+  h3 {
+    @include font(1rem, 400);
+    color: $gray;
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+  }
+}
+
+.team-responsibilities__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.team-responsibilities__tag {
+  padding: 4px 12px;
+  background: rgba($light-black, 0.5);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 4px;
+  color: $white;
+  @include font(0.9rem, 300);
+}
+
+.team-responsibilities__empty-tasks {
+  padding: 20px;
+  background: rgba($black, 0.3);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 4px;
+  color: rgba($gray, 0.5);
+  text-align: center;
+  @include font(0.9rem, 300);
+}

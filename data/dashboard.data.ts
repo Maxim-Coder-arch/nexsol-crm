@@ -2,6 +2,11 @@ import { IDashboard } from "../types/dashboard.type";
 
 const dashboard: IDashboard[] = [
   {
+    id: "documentation",
+    label: "Документация",
+    link: "/admins/documentation",
+  },
+  {
     id: "home",
     label: "Главная",
     link: "/",

@@ -19,6 +19,7 @@ export default function DirectorUsersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
 
   // Форма нового пользователя
   const [newName, setNewName] = useState('');
@@ -29,6 +30,16 @@ export default function DirectorUsersPage() {
   const [newSpecialtyInput, setNewSpecialtyInput] = useState('');
   const [newResponsibilities, setNewResponsibilities] = useState<string[]>([]);
   const [newResponsibilityInput, setNewResponsibilityInput] = useState('');
+
+  // Форма редактирования
+  const [editName, setEditName] = useState('');
+  const [editEmail, setEditEmail] = useState('');
+  const [editPassword, setEditPassword] = useState('');
+  const [editRole, setEditRole] = useState<'admin' | 'director' | 'manager'>('manager');
+  const [editSpecialties, setEditSpecialties] = useState<string[]>([]);
+  const [editSpecialtyInput, setEditSpecialtyInput] = useState('');
+  const [editResponsibilities, setEditResponsibilities] = useState<string[]>([]);
+  const [editResponsibilityInput, setEditResponsibilityInput] = useState('');
 
   useEffect(() => {
     fetchUsers();
@@ -46,6 +57,7 @@ export default function DirectorUsersPage() {
     }
   };
 
+  // ========== ДОБАВЛЕНИЕ ==========
   const addSpecialty = () => {
     if (newSpecialtyInput.trim()) {
       setNewSpecialties([...newSpecialties, newSpecialtyInput.trim()]);
@@ -93,13 +105,7 @@ export default function DirectorUsersPage() {
       if (res.ok) {
         const data = await res.json();
         setUsers(prev => [data.user, ...prev]);
-        // Очистка формы
-        setNewName('');
-        setNewEmail('');
-        setNewPassword('');
-        setNewRole('manager');
-        setNewSpecialties([]);
-        setNewResponsibilities([]);
+        resetForm();
         setShowForm(false);
         setError('');
       } else {
@@ -111,6 +117,99 @@ export default function DirectorUsersPage() {
     }
   };
 
+  const resetForm = () => {
+    setNewName('');
+    setNewEmail('');
+    setNewPassword('');
+    setNewRole('manager');
+    setNewSpecialties([]);
+    setNewResponsibilities([]);
+  };
+
+  // ========== РЕДАКТИРОВАНИЕ ==========
+  const openEdit = (user: User) => {
+    setEditingUser(user);
+    setEditName(user.name);
+    setEditEmail(user.email);
+    setEditRole(user.role);
+    setEditSpecialties([...user.specialties]);
+    setEditResponsibilities([...user.responsibilities]);
+    setEditPassword('');
+  };
+
+  const closeEdit = () => {
+    setEditingUser(null);
+    setEditPassword('');
+  };
+
+  const addEditSpecialty = () => {
+    if (editSpecialtyInput.trim()) {
+      setEditSpecialties([...editSpecialties, editSpecialtyInput.trim()]);
+      setEditSpecialtyInput('');
+    }
+  };
+
+  const removeEditSpecialty = (index: number) => {
+    setEditSpecialties(editSpecialties.filter((_, i) => i !== index));
+  };
+
+  const addEditResponsibility = () => {
+    if (editResponsibilityInput.trim()) {
+      setEditResponsibilities([...editResponsibilities, editResponsibilityInput.trim()]);
+      setEditResponsibilityInput('');
+    }
+  };
+
+  const removeEditResponsibility = (index: number) => {
+    setEditResponsibilities(editResponsibilities.filter((_, i) => i !== index));
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!editingUser) return;
+
+    try {
+      const updateData: any = {
+        name: editName,
+        email: editEmail,
+        role: editRole,
+        specialties: editSpecialties,
+        responsibilities: editResponsibilities
+      };
+
+      if (editPassword.trim()) {
+        updateData.password = editPassword;
+      }
+
+      const res = await fetch(`/api/director/users/${editingUser._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updateData)
+      });
+
+      if (res.ok) {
+        const updatedUser = {
+          ...editingUser,
+          name: editName,
+          email: editEmail,
+          role: editRole,
+          specialties: editSpecialties,
+          responsibilities: editResponsibilities
+        };
+        setUsers(prev => prev.map(u => u._id === editingUser._id ? updatedUser : u));
+        closeEdit();
+        setError('');
+      } else {
+        const data = await res.json();
+        setError(data.error || 'Ошибка при обновлении');
+      }
+    } catch (err) {
+      setError('Ошибка при обновлении');
+    }
+  };
+
+  // ========== УДАЛЕНИЕ ==========
   const deleteUser = async (id: string) => {
     if (!confirm('Удалить пользователя?')) return;
 
@@ -144,7 +243,7 @@ export default function DirectorUsersPage() {
     <div className="director-users">
       <div className="director-users__header">
         <h1>Управление пользователями</h1>
-        <p>Добавляйте и удаляйте сотрудников</p>
+        <p>Добавляйте, редактируйте и удаляйте сотрудников</p>
       </div>
 
       {/* Кнопка добавления */}
@@ -262,6 +361,127 @@ export default function DirectorUsersPage() {
         )}
       </AnimatePresence>
 
+      {/* Модальное окно редактирования */}
+      <AnimatePresence>
+        {editingUser && (
+          <>
+            <motion.div 
+              className="director-users__modal-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.form 
+                className="director-users__modal"
+                onSubmit={handleEditSubmit}
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              >
+                <div className="director-users__modal-header">
+                  <h2>Редактировать пользователя</h2>
+                  <button type="button" className="director-users__modal-close" onClick={closeEdit}>×</button>
+                </div>
+
+                <div className="director-users__modal-content">
+                  <div className="director-users__field">
+                    <label>Имя *</label>
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="director-users__field">
+                    <label>Email *</label>
+                    <input
+                      type="email"
+                      value={editEmail}
+                      onChange={(e) => setEditEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="director-users__field">
+                    <label>Новый пароль (оставьте пустым, если не меняете)</label>
+                    <input
+                      type="password"
+                      value={editPassword}
+                      onChange={(e) => setEditPassword(e.target.value)}
+                      placeholder="Минимум 6 символов"
+                    />
+                  </div>
+
+                  <div className="director-users__field">
+                    <label>Роль *</label>
+                    <select value={editRole} onChange={(e) => setEditRole(e.target.value as any)}>
+                      <option value="manager">Менеджер</option>
+                      <option value="admin">Администратор</option>
+                      <option value="director">Директор</option>
+                    </select>
+                  </div>
+
+                  <div className="director-users__field">
+                    <label>Специальности</label>
+                    <div className="director-users__tag-input">
+                      <input
+                        type="text"
+                        value={editSpecialtyInput}
+                        onChange={(e) => setEditSpecialtyInput(e.target.value)}
+                        placeholder="Например: Frontend разработчик"
+                        onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addEditSpecialty())}
+                      />
+                      <button type="button" onClick={addEditSpecialty}>+</button>
+                    </div>
+                    <div className="director-users__tags">
+                      {editSpecialties.map((spec, index) => (
+                        <span key={index} className="director-users__tag">
+                          {spec}
+                          <button type="button" onClick={() => removeEditSpecialty(index)}>×</button>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="director-users__field">
+                    <label>Обязанности</label>
+                    <div className="director-users__tag-input">
+                      <input
+                        type="text"
+                        value={editResponsibilityInput}
+                        onChange={(e) => setEditResponsibilityInput(e.target.value)}
+                        placeholder="Например: Разработка сайтов"
+                        onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addEditResponsibility())}
+                      />
+                      <button type="button" onClick={addEditResponsibility}>+</button>
+                    </div>
+                    <div className="director-users__tags">
+                      {editResponsibilities.map((resp, index) => (
+                        <span key={index} className="director-users__tag">
+                          {resp}
+                          <button type="button" onClick={() => removeEditResponsibility(index)}>×</button>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="director-users__modal-footer">
+                  <button type="button" className="director-users__modal-cancel" onClick={closeEdit}>
+                    Отмена
+                  </button>
+                  <button type="submit" className="director-users__modal-save">
+                    Сохранить
+                  </button>
+                </div>
+              </motion.form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* Список пользователей */}
       <div className="director-users__list">
         {loading ? (
@@ -283,12 +503,20 @@ export default function DirectorUsersPage() {
                     {getRoleLabel(user.role)}
                   </span>
                 </div>
-                <button
-                  className="director-users__card-delete"
-                  onClick={() => deleteUser(user._id)}
-                >
-                  ×
-                </button>
+                <div className="director-users__card-actions">
+                  <button
+                    className="director-users__card-edit"
+                    onClick={() => openEdit(user)}
+                  >
+                    ✎
+                  </button>
+                  <button
+                    className="director-users__card-delete"
+                    onClick={() => deleteUser(user._id)}
+                  >
+                    ×
+                  </button>
+                </div>
               </div>
 
               <div className="director-users__card-email">
