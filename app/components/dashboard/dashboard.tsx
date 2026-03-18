@@ -15,6 +15,7 @@ const Dashboard = () => {
     total: { today: 0, week: 0, month: 0 }
   });
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const router = useRouter();
   const toggleDashboard = () => setIsOpen(!isOpen);
   const [counts, setCounts] = useState({
@@ -25,18 +26,6 @@ const Dashboard = () => {
     ideas: 0,
     leads: 0,
   });
-
-  const getCookie = (name: string): string | null => {
-    if (typeof document === 'undefined') return null;
-    
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) {
-      const cookieValue = parts.pop()?.split(';').shift();
-      return cookieValue || null;
-    }
-    return null;
-  };
 
   const fetchCounts = async () => {
     try {
@@ -69,67 +58,72 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    // 1. Получаем имя пользователя из куки (один раз)
-    const userNameFromCookie = getCookie('nexsol_user');
-    
-    if (userNameFromCookie) {
-      try {
-        const decodedName = decodeURIComponent(userNameFromCookie);
-        console.log('✅ Имя из куки:', decodedName);
-        setUserName(decodedName);
-      } catch (e) {
-        console.error('Ошибка декодирования:', e);
-        setUserName(userNameFromCookie);
-      }
-    } else {
-      console.log('❌ Кука nexsol_user не найдена');
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('/api/stats');
+      const data = await response.json();
+      setStats(data);
+    } catch (error) {
+      console.error('Failed to load stats:', error);
     }
+  };
 
-    // 2. Загружаем статистику
-    const fetchStats = async () => {
+  useEffect(() => {
+    const checkAuth = async () => {
       try {
-        const response = await fetch('/api/stats');
-        const data = await response.json();
-        setStats(data);
+        const res = await fetch('/api/auth/me');
+        const data = await res.json();
+        
+        if (data.authenticated) {
+          console.log('✅ Авторизован как:', data.user);
+          setUserName(data.user);
+          setIsAuthenticated(true);
+          
+          // Загружаем данные
+          await fetchStats();
+          await fetchCounts();
+        } else {
+          console.log('❌ Не авторизован');
+          setIsAuthenticated(false);
+          router.push('/login');
+        }
       } catch (error) {
-        console.error('Failed to load stats:', error);
+        console.error('Ошибка проверки авторизации:', error);
+        setIsAuthenticated(false);
+        router.push('/login');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchStats();
-    fetchCounts();
+    checkAuth();
     
-    // 3. Обновляем статистику каждые 30 секунд
     const interval = setInterval(fetchStats, 30000);
     return () => clearInterval(interval);
-  }, []); // ← пустой массив, выполнится только один раз при монтировании
+  }, []);
 
   const handleLogout = async () => {
     try {
       const res = await fetch('/api/auth/logout', { 
         method: 'POST',
-        credentials: 'include' // важно для отправки кук
+        credentials: 'include'
       });
       
       if (res.ok) {
-        // Принудительно удаляем куки на клиенте (на всякий случай)
-        document.cookie = 'nexsol_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        document.cookie = 'nexsol_user=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        
-        // Очищаем состояние
-        setUserName('');
-        
-        // Редирект с полной перезагрузкой (важно для мобильных)
-        window.location.href = '/login';
-        // или router.push('/login') + router.refresh()
+        router.push('/login');
       }
     } catch (error) {
       console.error('Logout error:', error);
     }
   };
+
+  if (isAuthenticated === null) {
+    return null; // или прелоадер
+  }
+
+  if (!isAuthenticated) {
+    return null; // редирект уже произошел
+  }
 
   return (
     <>
@@ -199,9 +193,7 @@ const Dashboard = () => {
                 transition={{ duration: 0.2, delay: 0.1 }}
               >
                 <span className="user-greeting">👋</span>
-                <span className="user-name">
-                  {userName || 'Пользователь'}
-                </span>
+                <span className="user-name">{userName}</span>
               </motion.div>
             )}
           </AnimatePresence>
@@ -209,7 +201,6 @@ const Dashboard = () => {
 
         <nav className="dashboard-nav">
           {dashboard.map((item, index) => {
-            // Определяем, нужно ли показывать счетчик
             const showCounter = [
               'advertisements', 
               'templates', 
@@ -219,7 +210,6 @@ const Dashboard = () => {
               'leads'
             ].includes(item.id);
             
-            // Получаем значение счетчика
             const counterValue = 
               item.id === 'advertisements' ? counts.announcements :
               item.id === 'templates' ? counts.templates :
@@ -299,7 +289,6 @@ const Dashboard = () => {
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.2, delay: 0.3 }}
             >
-              
               <motion.button
                 className="logout-button"
                 onClick={handleLogout}

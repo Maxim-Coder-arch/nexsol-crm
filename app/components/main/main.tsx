@@ -74,6 +74,7 @@ const Main = () => {
   });
   const [recentExpenses, setRecentExpenses] = useState<Expense[]>([]);
   const [recentIncomes, setRecentIncomes] = useState<Income[]>([]);
+  const [teamMembers, setTeamMembers] = useState<any[]>([]);
 
   const team = [
     { initials: 'М', name: 'Максим', role: 'Технический директор, фронтенд разработчик, тимлид, стратег' },
@@ -85,12 +86,13 @@ const Main = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsRes, visitorsRes, chartRes, expensesRes, incomesRes] = await Promise.all([
+        const [statsRes, visitorsRes, chartRes, expensesRes, incomesRes, usersRes] = await Promise.all([
           fetch('/api/stats'),
           fetch('/api/visitors/recent?limit=10'),
           fetch('/api/visitors/charts'),
           fetch('/api/finance/expenses'),
-          fetch('/api/finance/incomes')
+          fetch('/api/finance/incomes'),
+          fetch('/api/users')
         ]);
 
         const statsData = await statsRes.json();
@@ -98,12 +100,14 @@ const Main = () => {
         const chartData = await chartRes.json();
         const expensesData = await expensesRes.json();
         const incomesData = await incomesRes.json();
+        const usersData = await usersRes.json();
 
         setStats(statsData);
         setVisitors(visitorsData);
         setWeeklyData(chartData.weekly || []);
         setMonthlyData(chartData.monthly || []);
         setYearlyData(chartData.yearly || []);
+        setTeamMembers(usersData); // ← реальные сотрудники
 
         // Сохраняем последние 3 операции
         setRecentExpenses(expensesData.slice(0, 3));
@@ -355,19 +359,33 @@ const Main = () => {
 </section>
 
       <section className="dashboard-section">
-        <h2>Команда</h2>
-        <div className="team-grid">
-          {team.map((member, idx) => (
-            <div key={idx} className="team-card">
-              <div className="team-avatar">{member.initials}</div>
-              <div className="team-info">
-                <div className="team-name">{member.name}</div>
-                <div className="team-role">{member.role}</div>
+  <h2>Команда</h2>
+  <div className="team-grid">
+    {teamMembers.length > 0 ? (
+      teamMembers.map((member) => (
+        <div key={member._id} className="team-card">
+          <div className="team-avatar">
+            {member.name.charAt(0).toUpperCase()}
+          </div>
+          <div className="team-info">
+            <div className="team-name">{member.name}</div>
+            {member.specialties && member.specialties.length > 0 ? (
+              <div className="team-specialties">
+                {member.specialties.join(' • ')}
               </div>
-            </div>
-          ))}
+            ) : (
+              <div className="team-specialties team-specialties--empty">
+                Специальности не указаны
+              </div>
+            )}
+          </div>
         </div>
-      </section>
+      ))
+    ) : (
+      <div className="team-empty">Загрузка сотрудников...</div>
+    )}
+  </div>
+</section>
 
       <section className="dashboard-section">
         <h2>Детальная статистика</h2>

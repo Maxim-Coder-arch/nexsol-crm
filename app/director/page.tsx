@@ -7,6 +7,11 @@ import "../styles/director/director.scss";
 export default function DirectorPage() {
   const modules = [
     {
+      title: 'Заявки',
+      description: 'Заявки от клиентов с основного сайта',
+      link: '/director/leads',
+    },
+    {
       title: 'Воронки',
       description: 'Разработка и проектирование воронок разных типов',
       link: '/director/funnels',
@@ -30,7 +35,12 @@ export default function DirectorPage() {
       title: 'Инструменты',
       description: 'Полезные инструменты для работы',
       link: '/director/tools',
-    }
+    },
+    {
+      title: 'Пользователи',
+      description: 'Управление пользователями: добавление и удаление пользователей',
+      link: '/director/users',
+    },
   ];
 
   return (

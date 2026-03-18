@@ -355,3 +355,20 @@
     }
   }
 }
+
+.team-specialties {
+  @include font(0.8rem, 300);
+  color: $gray;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.team-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  background: rgba($light-black, 0.3);
+  border: 1px solid rgba($border-white, 0.1);
+  border-radius: 4px;
+  color: $gray;
+}

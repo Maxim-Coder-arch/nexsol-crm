@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import "../styles/login/login.scss";
 
 export default function LoginForm() {
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ export default function LoginForm() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
@@ -33,14 +33,13 @@ export default function LoginForm() {
         // Даем время кукам сохраниться
         await new Promise(resolve => setTimeout(resolve, 500));
         
-        // Принудительная перезагрузка (самый надежный способ)
+        // Редирект
         window.location.href = from;
-        // или router.push(from) + router.refresh()
       } else {
-        setError(data.error || 'Login failed');
+        setError(data.error || 'Неверный email или пароль');
       }
     } catch (err) {
-      setError('Network error');
+      setError('Ошибка подключения');
     } finally {
       setLoading(false);
     }
@@ -58,17 +57,18 @@ export default function LoginForm() {
         <span>NEXSOL CRM</span>
       </div>
       
-      <h1>Вход в crm систему от NEXSOL</h1>
+      <h1>Вход в CRM</h1>
       
       <form onSubmit={handleSubmit}>
         <div className="input-group">
           <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Имя"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
             disabled={loading}
             autoFocus
+            required
           />
         </div>
         
@@ -77,8 +77,9 @@ export default function LoginForm() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Общий пароль"
+            placeholder="Пароль"
             disabled={loading}
+            required
           />
         </div>
         

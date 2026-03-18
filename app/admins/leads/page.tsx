@@ -57,24 +57,6 @@ export default function LeadsPage() {
     }
   };
 
-  const deleteLead = async (id: string) => {
-    if (!confirm('Удалить заявку?')) return;
-
-    try {
-      const res = await fetch('/api/leads/manage', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
-      });
-
-      if (res.ok) {
-        fetchData();
-      }
-    } catch (err) {
-      setError('Ошибка удаления');
-    }
-  };
-
   const formatDate = (date: string) => {
     return new Date(date).toLocaleString('ru-RU', {
       day: '2-digit',
@@ -159,12 +141,7 @@ export default function LeadsPage() {
                   <h3 className="leads__card-name">{lead.name}</h3>
                   <span className="leads__card-date">{formatDate(lead.createdAt)}</span>
                 </div>
-                <button
-                  className="leads__card-delete"
-                  onClick={() => deleteLead(lead._id)}
-                >
-                  ×
-                </button>
+                {/* Кнопка удаления УБРАНА */}
               </div>
 
               <div className="leads__card-content">

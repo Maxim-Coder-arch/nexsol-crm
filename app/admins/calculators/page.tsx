@@ -2,14 +2,13 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  servicesData, 
+  priceServicesData, 
+  initialIncomeItems, 
+  initialExpenseItems 
+} from '../../../data/calculators.data';
 import "../../styles/calculators/calculators.scss";
-
-interface Service {
-  id: string;
-  name: string;
-  baseDays: number;
-  description: string;
-}
 
 interface CostItem {
   id: string;
@@ -17,17 +16,8 @@ interface CostItem {
   value: number;
 }
 
-const CalculatorsPage = () => {
-  const [services, setServices] = useState<Service[]>([
-    { id: 'prep', name: 'Изучение ниши и подготовка', baseDays: 1, description: 'Анализ рынка и конкурентов' },
-    { id: 'social', name: 'Реклама в соцсетях', baseDays: 2, description: 'Настройка и ведение таргета' },
-    { id: 'landing', name: 'Разработка лендинга', baseDays: 3, description: 'Одностраничный сайт' },
-    { id: 'roadmap', name: 'Построение роадмапов', baseDays: 1, description: 'Стратегия развития' },
-    { id: 'funnel', name: 'Воронки продаж', baseDays: 2, description: 'Маркетинговые и sales-воронки' },
-    { id: 'strategy', name: 'Индивидуальная стратегия', baseDays: 4, description: 'Комплексный план развития' },
-    { id: 'complex', name: 'Сложный сайт', baseDays: 7, description: 'Интернет-магазин / кастомное решение' },
-  ]);
-
+export default function CalculatorsPage() {
+  const [services] = useState(servicesData);
   const [selectedServices, setSelectedServices] = useState<string[]>(['prep']);
   const [totalDays, setTotalDays] = useState(1);
   const [showComplexWarning, setShowComplexWarning] = useState(false);
@@ -54,36 +44,48 @@ const CalculatorsPage = () => {
       return newSelected;
     });
   };
+
+  // ========== КАЛЬКУЛЯТОР РЕНТАБЕЛЬНОСТИ ==========
   const [revenue, setRevenue] = useState<number>(100000);
   const [costs, setCosts] = useState<number>(60000);
   const [profit, setProfit] = useState<number>(40000);
   const [margin, setMargin] = useState<number>(40);
 
-  const handleRevenueChange = (value: number) => {
-    setRevenue(value);
-    const newProfit = value - costs;
+  const handleRevenueChange = (value: string) => {
+    const num = value === '' ? 0 : Number(value);
+    setRevenue(num);
+    const newProfit = num - costs;
     setProfit(newProfit);
-    setMargin(costs > 0 ? Math.round((newProfit / value) * 100) : 0);
+    setMargin(costs > 0 ? Math.round((newProfit / num) * 100) : 0);
   };
 
-  const handleCostsChange = (value: number) => {
-    setCosts(value);
-    const newProfit = revenue - value;
+  const handleCostsChange = (value: string) => {
+    const num = value === '' ? 0 : Number(value);
+    setCosts(num);
+    const newProfit = revenue - num;
     setProfit(newProfit);
     setMargin(revenue > 0 ? Math.round((newProfit / revenue) * 100) : 0);
   };
 
-  const [incomeItems, setIncomeItems] = useState<CostItem[]>([
-    { id: 'inc1', name: 'Доход от разработки', value: 0 },
-    { id: 'inc2', name: 'Доход от рекламы', value: 0 },
-    { id: 'inc3', name: 'Доход от стратегий', value: 0 },
-  ]);
+  // ========== КАЛЬКУЛЯТОР СТОИМОСТИ ==========
+  const [selectedPriceServices, setSelectedPriceServices] = useState<string[]>([]);
 
-  const [expenseItems, setExpenseItems] = useState<CostItem[]>([
-    { id: 'exp1', name: 'Фрилансеры', value: 0 },
-    { id: 'exp2', name: 'Сервисы', value: 0 },
-    { id: 'exp3', name: 'Налоги', value: 0 },
-  ]);
+  const togglePriceService = (serviceId: string) => {
+    setSelectedPriceServices(prev =>
+      prev.includes(serviceId)
+        ? prev.filter(id => id !== serviceId)
+        : [...prev, serviceId]
+    );
+  };
+
+  const totalPrice = selectedPriceServices.reduce((sum, id) => {
+    const service = priceServicesData.find(s => s.id === id);
+    return sum + (service?.price || 0);
+  }, 0);
+
+  // ========== КАЛЬКУЛЯТОР ПРИБЫЛИ/УБЫТКОВ ==========
+  const [incomeItems, setIncomeItems] = useState<CostItem[]>(initialIncomeItems);
+  const [expenseItems, setExpenseItems] = useState<CostItem[]>(initialExpenseItems);
 
   const addIncomeItem = () => {
     const newId = `inc${incomeItems.length + 1}`;
@@ -107,18 +109,6 @@ const CalculatorsPage = () => {
     );
   };
 
-  const deleteIncomeItem = (id: string) => {
-    if (incomeItems.length > 1) {
-      setIncomeItems(prev => prev.filter(item => item.id !== id));
-    }
-  };
-
-  const deleteExpenseItem = (id: string) => {
-    if (expenseItems.length > 1) {
-      setExpenseItems(prev => prev.filter(item => item.id !== id));
-    }
-  };
-
   const updateIncomeName = (id: string, name: string) => {
     setIncomeItems(prev =>
       prev.map(item => (item.id === id ? { ...item, name } : item))
@@ -131,6 +121,18 @@ const CalculatorsPage = () => {
     );
   };
 
+  const deleteIncomeItem = (id: string) => {
+    if (incomeItems.length > 1) {
+      setIncomeItems(prev => prev.filter(item => item.id !== id));
+    }
+  };
+
+  const deleteExpenseItem = (id: string) => {
+    if (expenseItems.length > 1) {
+      setExpenseItems(prev => prev.filter(item => item.id !== id));
+    }
+  };
+
   const totalIncome = incomeItems.reduce((sum, item) => sum + item.value, 0);
   const totalExpense = expenseItems.reduce((sum, item) => sum + item.value, 0);
   const netProfit = totalIncome - totalExpense;
@@ -140,17 +142,18 @@ const CalculatorsPage = () => {
     <div className="calculators">
       <div className="calculators__header">
         <h1>Калькуляторы</h1>
-        <p>Рассчитайте сроки, рентабельность и прибыль вашего бизнеса</p>
+        <p>Рассчитайте сроки, стоимость, рентабельность и прибыль</p>
       </div>
 
       <div className="calculators__grid">
+        {/* ===== КАЛЬКУЛЯТОР СРОКОВ ===== */}
         <motion.div 
           className="calculator-card"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="calculator-card__title">Калькулятор сроков разработки</h2>
+          <h2 className="calculator-card__title">Сроки разработки</h2>
           
           <div className="services-list">
             {services.map((service) => {
@@ -191,7 +194,7 @@ const CalculatorsPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
               >
-                ⚠️ Сложный сайт требует отдельного обсуждения и предоплаты
+                ⚠️ Сложный сайт требует отдельного обсуждения
               </motion.div>
             )}
           </AnimatePresence>
@@ -201,21 +204,23 @@ const CalculatorsPage = () => {
             <span className="calculator-card__result-value">{totalDays} дней</span>
           </div>
         </motion.div>
+
+        {/* ===== КАЛЬКУЛЯТОР РЕНТАБЕЛЬНОСТИ ===== */}
         <motion.div 
           className="calculator-card"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <h2 className="calculator-card__title">Калькулятор рентабельности</h2>
+          <h2 className="calculator-card__title">Рентабельность</h2>
           
           <div className="input-group">
             <label className="input-group__label">Выручка (₽)</label>
             <input 
               type="number" 
               className="input-group__field"
-              value={revenue} 
-              onChange={(e) => handleRevenueChange(Number(e.target.value))}
+              value={revenue === 0 ? '' : revenue}
+              onChange={(e) => handleRevenueChange(e.target.value)}
             />
           </div>
 
@@ -224,8 +229,8 @@ const CalculatorsPage = () => {
             <input 
               type="number" 
               className="input-group__field"
-              value={costs} 
-              onChange={(e) => handleCostsChange(Number(e.target.value))}
+              value={costs === 0 ? '' : costs}
+              onChange={(e) => handleCostsChange(e.target.value)}
             />
           </div>
 
@@ -251,11 +256,52 @@ const CalculatorsPage = () => {
           </div>
         </motion.div>
 
+        {/* ===== КАЛЬКУЛЯТОР СТОИМОСТИ ===== */}
         <motion.div 
           className="calculator-card"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <h2 className="calculator-card__title">Стоимость услуг</h2>
+          
+          <div className="price-services">
+            {priceServicesData.map((service) => (
+              <div key={service.id} 
+              className={`price-service ${selectedPriceServices.includes(service.id) ? 'price-service__selected' : ''}`}>
+                <label className="price-service__label">
+                  <input 
+                    type="checkbox" 
+                    className="price-service__checkbox"
+                    checked={selectedPriceServices.includes(service.id)}
+                    onChange={() => togglePriceService(service.id)}
+                  />
+                  {service.name}
+                </label>
+                <span className="price-service__value">
+                  от {service.price.toLocaleString()} {service.unit}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="calculator-card__result">
+            <span className="calculator-card__result-label">Примерная стоимость:</span>
+            <span className="calculator-card__result-value">
+              от {totalPrice.toLocaleString()} ₽
+            </span>
+          </div>
+          <div className="calculator-card__note">
+            * Точная цена обсуждается индивидуально
+          </div>
+        </motion.div>
+
+        {/* ===== КАЛЬКУЛЯТОР ПРИБЫЛИ/УБЫТКОВ ===== */}
+        <motion.div 
+          className="calculator-card calculator-card--full"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
         >
           <h2 className="calculator-card__title">Прибыль и убытки</h2>
           
@@ -277,8 +323,11 @@ const CalculatorsPage = () => {
                   <input 
                     type="number" 
                     className="cost-item__value"
-                    value={item.value} 
-                    onChange={(e) => updateIncomeItem(item.id, Number(e.target.value))}
+                    value={item.value === 0 ? '' : item.value}
+                    onChange={(e) => {
+                      const val = e.target.value === '' ? 0 : Number(e.target.value);
+                      updateIncomeItem(item.id, val);
+                    }}
                     placeholder="Сумма"
                   />
                   <button className="cost-item__remove" onClick={() => deleteIncomeItem(item.id)}>×</button>
@@ -307,8 +356,11 @@ const CalculatorsPage = () => {
                   <input 
                     type="number" 
                     className="cost-item__value"
-                    value={item.value} 
-                    onChange={(e) => updateExpenseItem(item.id, Number(e.target.value))}
+                    value={item.value === 0 ? '' : item.value}
+                    onChange={(e) => {
+                      const val = e.target.value === '' ? 0 : Number(e.target.value);
+                      updateExpenseItem(item.id, val);
+                    }}
                     placeholder="Сумма"
                   />
                   <button className="cost-item__remove" onClick={() => deleteExpenseItem(item.id)}>×</button>
@@ -331,6 +383,4 @@ const CalculatorsPage = () => {
       </div>
     </div>
   );
-};
-
-export default CalculatorsPage;
+}

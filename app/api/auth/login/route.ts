@@ -1,39 +1,45 @@
 import { NextResponse } from 'next/server';
+import { UserModel } from '@/lib/mongodb/models/crm/users';
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const body = await req.json();
-    const { name, password } = body;
-    const usersString = process.env.ADMIN_USERS || '';
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    const validUsers = usersString.split(',').map(u => u.trim().toLowerCase());
-    const userNameLower = name?.toLowerCase().trim();
-    const isUserValid = validUsers.includes(userNameLower);
+    const { email, password } = await request.json();
     
-    if (!isUserValid) {
+    if (!email || !password) {
       return NextResponse.json(
-        { error: 'User not found' },
-        { status: 401 }
+        { error: 'Email and password are required' },
+        { status: 400 }
       );
     }
-    if (password !== adminPassword) {
+    
+    // Ищем пользователя по email
+    const user = await UserModel.findByEmail(email);
+    
+    if (!user) {
       return NextResponse.json(
-        { error: 'Invalid password' },
+        { error: 'Invalid credentials' },
         { status: 401 }
       );
     }
     
+    // Проверяем пароль
+    const isValid = await UserModel.comparePassword(password, user.password);
+    
+    if (!isValid) {
+      return NextResponse.json(
+        { error: 'Invalid credentials' },
+        { status: 401 }
+      );
+    }
+    
+    // Устанавливаем куки
     const response = NextResponse.json({ 
       success: true,
-      user: name,
-      message: 'Login successful' 
-    });
-    response.cookies.set({
-      name: 'nexsol_user',
-      value: name,
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: false,
+      user: {
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
     });
     
     response.cookies.set({
@@ -42,14 +48,38 @@ export async function POST(req: Request) {
       path: '/',
       maxAge: 60 * 60 * 24 * 7,
       httpOnly: true,
-      secure: true,
     });
-    response.headers.set('Cache-Control', 'no-store, max-age=0');
+    
+    response.cookies.set({
+      name: 'nexsol_user',
+      value: user.name,
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+      httpOnly: false,
+    });
+    
+    response.cookies.set({
+      name: 'nexsol_role',
+      value: user.role,
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+      httpOnly: false,
+    });
+    
+    response.cookies.set({
+      name: 'nexsol_email',
+      value: user.email,
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+      httpOnly: false,
+    });
+    
     return response;
     
   } catch (error) {
+    console.error('Login error:', error);
     return NextResponse.json(
-      { error: 'Server error', details: error.message },
+      { error: 'Login failed' },
       { status: 500 }
     );
   }
