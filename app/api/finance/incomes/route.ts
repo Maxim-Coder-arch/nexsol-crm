@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const incomes = await FinanceModel.getIncomes();
     return NextResponse.json(incomes);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch incomes' },
       { status: 500 }
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     });
     
     return NextResponse.json({ success: true, income });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to add income' },
       { status: 500 }

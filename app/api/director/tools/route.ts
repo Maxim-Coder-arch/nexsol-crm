@@ -6,7 +6,6 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function GET() {
-  console.log('📚 GET /api/director/tools called');
   
   try {
     const tools = await ToolModel.getAll();
@@ -21,13 +20,10 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  console.log('📝 POST /api/director/tools called');
   
   try {
     const body = await request.json();
     const { name, description, url, category, icon } = body;
-    
-    // ✅ Ждем cookies()
     const cookieStore = await cookies();
     const userCookie = cookieStore.get('nexsol_user');
     const createdBy = userCookie?.value || 'Директор';
@@ -50,8 +46,7 @@ export async function POST(request: Request) {
     
     return NextResponse.json({ success: true, tool });
     
-  } catch (error) {
-    console.error('❌ Error creating tool:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create tool' },
       { status: 500 }

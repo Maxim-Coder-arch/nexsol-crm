@@ -3,15 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import "../../styles/ideas/ideas.scss";
-
-interface Idea {
-  _id: string;
-  title: string;
-  description: string;
-  author: string;
-  priority: number;
-  createdAt: string;
-}
+import { Idea } from '@/types/ideas.type';
 
 export default function IdeasPage() {
   const [ideas, setIdeas] = useState<Idea[]>([]);
@@ -31,7 +23,7 @@ export default function IdeasPage() {
       const res = await fetch('/api/ideas');
       const data = await res.json();
       setIdeas(data);
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки');
     } finally {
       setLoading(false);
@@ -66,7 +58,7 @@ export default function IdeasPage() {
         const data = await res.json();
         setError(data.error || 'Ошибка при добавлении');
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при добавлении');
     }
   };
@@ -85,12 +77,11 @@ export default function IdeasPage() {
         const data = await res.json();
         setError(data.error || 'Ошибка при удалении');
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при удалении');
     }
   };
 
-  // Статистика
   const totalIdeas = ideas.length;
   const avgPriority = ideas.length > 0 
     ? (ideas.reduce((acc, curr) => acc + curr.priority, 0) / ideas.length).toFixed(1)
@@ -99,14 +90,13 @@ export default function IdeasPage() {
     ? Math.max(...ideas.map(i => i.priority))
     : 0;
 
-  // Цвет приоритета
   const getPriorityColor = (priority: number) => {
     switch(priority) {
-      case 5: return '#ff6b6b'; // красный - срочно
-      case 4: return '#f2c94c'; // желтый - важно
-      case 3: return '#60a5fa'; // синий - средне
-      case 2: return '#888';    // серый - низко
-      case 1: return '#666';    // темно-серый - очень низко
+      case 5: return '#ff6b6b';
+      case 4: return '#f2c94c';
+      case 3: return '#60a5fa';
+      case 2: return '#888';
+      case 1: return '#666';
       default: return '#888';
     }
   };

@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const achievements = await AchievementModel.getAll();
     return NextResponse.json(achievements);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch achievements' },
       { status: 500 }
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     
     const achievement = await AchievementModel.create(title, description, rating);
     return NextResponse.json({ success: true, achievement });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create achievement' },
       { status: 500 }

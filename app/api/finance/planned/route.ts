@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const expenses = await FinanceModel.getPlannedExpenses();
     return NextResponse.json(expenses);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch planned expenses' },
       { status: 500 }
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     });
     
     return NextResponse.json({ success: true, expense });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to add planned expense' },
       { status: 500 }
@@ -57,7 +57,7 @@ export async function DELETE(request: Request) {
     }
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to delete planned expense' },
       { status: 500 }

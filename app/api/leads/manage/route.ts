@@ -5,12 +5,11 @@ import { ObjectId } from 'mongodb';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-// GET /api/leads/manage - получить все заявки (для команды)
 export async function GET() {
   try {
     const leads = await LeadModel.getAll();
     return NextResponse.json(leads);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch leads' },
       { status: 500 }
@@ -18,7 +17,6 @@ export async function GET() {
   }
 }
 
-// PATCH /api/leads/manage - обновить статус заявки
 export async function PATCH(request: Request) {
   try {
     const { id, status } = await request.json();
@@ -40,7 +38,7 @@ export async function PATCH(request: Request) {
     }
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to update lead' },
       { status: 500 }
@@ -48,7 +46,6 @@ export async function PATCH(request: Request) {
   }
 }
 
-// DELETE /api/leads/manage - удалить заявку
 export async function DELETE(request: Request) {
   try {
     const { id } = await request.json();
@@ -70,7 +67,7 @@ export async function DELETE(request: Request) {
     }
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to delete lead' },
       { status: 500 }

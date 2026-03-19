@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const announcements = await AnnouncementModel.getAll();
     return NextResponse.json(announcements);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch announcements' },
       { status: 500 }
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     });
     
     return NextResponse.json({ success: true, announcement });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create announcement' },
       { status: 500 }

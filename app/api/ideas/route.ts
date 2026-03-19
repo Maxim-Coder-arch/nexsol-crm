@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const ideas = await IdeaModel.getAll();
     return NextResponse.json(ideas);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch ideas' },
       { status: 500 }
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     
     const idea = await IdeaModel.create(title, description, author, priority);
     return NextResponse.json({ success: true, idea });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create idea' },
       { status: 500 }

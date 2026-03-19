@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const responsibilities = await ResponsibilityModel.getAll();
     return NextResponse.json(responsibilities);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch responsibilities' },
       { status: 500 }
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     const responsibility = await ResponsibilityModel.create(assignee, tasks);
     
     return NextResponse.json({ success: true, responsibility });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create responsibility' },
       { status: 500 }

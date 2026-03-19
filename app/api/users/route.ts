@@ -5,10 +5,9 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const users = await UserModel.getAll(); // уже без паролей
+    const users = await UserModel.getAll();
     return NextResponse.json(users);
-  } catch (error) {
-    console.error('Failed to fetch users:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch users' },
       { status: 500 }

@@ -11,7 +11,6 @@ const DocumentationPage = () => {
       </div>
 
       <div className="documentation__content">
-        {/* ОСНОВНАЯ ИНФОРМАЦИЯ */}
         <section className="doc-section">
           <h2 className="doc-section__title">Основная информация</h2>
           
@@ -31,7 +30,6 @@ const DocumentationPage = () => {
           </div>
         </section>
 
-        {/* ПРАВИЛА ИСПОЛЬЗОВАНИЯ */}
         <section className="doc-section">
           <h2 className="doc-section__title">Правила использования</h2>
           
@@ -46,7 +44,6 @@ const DocumentationPage = () => {
           </div>
         </section>
 
-        {/* ВЛАДЕЛЕЦ БИЗНЕСА */}
         <section className="doc-section">
           <h2 className="doc-section__title">Владелец бизнеса (Максим)</h2>
           
@@ -59,12 +56,9 @@ const DocumentationPage = () => {
             </ul>
           </div>
         </section>
-
-        {/* ИНСТРУКЦИЯ ПО ИСПОЛЬЗОВАНИЮ */}
         <section className="doc-section">
           <h2 className="doc-section__title">Инструкция к использованию CRM системе</h2>
 
-          {/* ГЛАВНАЯ */}
           <div className="doc-card">
             <h3>Главная</h3>
             
@@ -95,19 +89,16 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* ЗАЯВКИ */}
           <div className="doc-card">
             <h3>Заявки</h3>
             <p>Список заявок с основного сайта. Можно менять статус (новая, связались, клиент, потеря). Данные приходят автоматически.</p>
           </div>
 
-          {/* БЫСТРЫЙ ЧАТ С AI */}
           <div className="doc-card">
             <h3>Быстрый чат с искусственным интеллектом</h3>
             <p>Интеграция с OpenRouter (модель Arcee AI). Помогает с текстами, идеями, аналитикой. Все сообщения сохраняются.</p>
           </div>
 
-          {/* УЧЕТ ВРЕМЕНИ */}
           <div className="doc-card">
             <h3>Учет времени</h3>
             <p>Таймер для отслеживания времени на задачах:</p>
@@ -120,7 +111,6 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* БАЗА КЛИЕНТОВ */}
           <div className="doc-card">
             <h3>База данных клиентов</h3>
             <p>Хранилище информации о клиентах:</p>
@@ -136,7 +126,6 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* ОБЪЯВЛЕНИЯ */}
           <div className="doc-card">
             <h3>Объявления</h3>
             <p>Система корпоративных объявлений:</p>
@@ -149,7 +138,6 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* ФИНАНСЫ */}
           <div className="doc-card">
             <h3>Финансы</h3>
             <p>Полноценный финансовый учет:</p>
@@ -162,7 +150,6 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* ВОРОНКИ */}
           <div className="doc-card">
             <h3>Воронки</h3>
             <p>Конструктор воронок продаж и маркетинга:</p>
@@ -175,7 +162,6 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* КАЛЬКУЛЯТОРЫ */}
           <div className="doc-card">
             <h3>Калькуляторы</h3>
             <p>Четыре вида калькуляторов:</p>
@@ -187,7 +173,6 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* ОБЯЗАННОСТИ */}
           <div className="doc-card">
             <h3>Обязанности</h3>
             <p>Список обязанностей команды (автоматически из профилей пользователей):</p>
@@ -199,7 +184,6 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* ИНСТРУМЕНТЫ */}
           <div className="doc-card">
             <h3>Инструменты</h3>
             <p>База полезных сервисов для работы:</p>
@@ -211,7 +195,6 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* ТЕКСТОВЫЕ ШАБЛОНЫ */}
           <div className="doc-card">
             <h3>Текстовые шаблоны</h3>
             <p>Готовые тексты для работы:</p>
@@ -223,7 +206,6 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* ЗАМЕТКИ */}
           <div className="doc-card">
             <h3>Заметки</h3>
             <p>Корпоративные заметки:</p>
@@ -235,7 +217,6 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* ДОСТИЖЕНИЯ */}
           <div className="doc-card">
             <h3>Достижения</h3>
             <p>Отслеживание бизнес-побед:</p>
@@ -247,7 +228,6 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* ИДЕИ */}
           <div className="doc-card">
             <h3>Идеи</h3>
             <p>Банк идей для бизнеса:</p>
@@ -259,13 +239,11 @@ const DocumentationPage = () => {
             </ul>
           </div>
 
-          {/* ССЫЛКА НА САЙТ */}
           <div className="doc-card">
             <h3>Ссылка на основной сайт</h3>
             <p>Быстрый переход на публичный сайт NEXSOL.</p>
           </div>
 
-          {/* РАЗДЕЛ АДМИНИСТРАЦИИ */}
           <div className="doc-card doc-card--important">
             <h3>Раздел для администрации и основателя</h3>
             <p className="doc-note">Доступ только у Максима</p>

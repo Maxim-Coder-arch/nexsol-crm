@@ -7,7 +7,7 @@ export const revalidate = 0;
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const period = searchParams.get('period') || 'week'; // week, month, year
+    const period = searchParams.get('period') || 'week';
     
     const endDate = new Date();
     let startDate = new Date();
@@ -26,7 +26,6 @@ export async function GET(request: Request) {
     
     const { expenses, incomes } = await FinanceModel.getStatsForPeriod(startDate, endDate);
     
-    // Группировка по дням для графика
     const chartData = [];
     const currentDate = new Date(startDate);
     
@@ -59,7 +58,7 @@ export async function GET(request: Request) {
         profit: incomes.reduce((sum, i) => sum + i.amount, 0) - expenses.reduce((sum, e) => sum + e.amount, 0)
       }
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch stats' },
       { status: 500 }

@@ -4,41 +4,15 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import "../../styles/finance/finance.scss";
+import { 
+  Expense, 
+  Income, 
+  PlannedExpense, 
+  ChartData
+} from '@/types/finance.type';
 
-interface Expense {
-  _id: string;
-  author: string;
-  description: string;
-  amount: number;
-  date: string;
-  rationality: number;
-}
-
-interface Income {
-  _id: string;
-  author: string;
-  description: string;
-  amount: number;
-  date: string;
-}
-
-interface PlannedExpense {
-  _id: string;
-  author: string;
-  description: string;
-  amount: number;
-  plannedDate: string;
-}
-
-interface ChartData {
-  date: string;
-  expenses: number;
-  incomes: number;
-  profit: number;
-}
 
 export default function FinancePage() {
-  // Состояния
   const [activeTab, setActiveTab] = useState<'expenses' | 'incomes' | 'planned'>('expenses');
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [incomes, setIncomes] = useState<Income[]>([]);
@@ -49,7 +23,6 @@ export default function FinancePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Формы
   const [newExpense, setNewExpense] = useState({
     author: '',
     description: '',
@@ -72,7 +45,6 @@ export default function FinancePage() {
     plannedDate: new Date().toISOString().split('T')[0]
   });
 
-  // Загрузка данных
   useEffect(() => {
     fetchAllData();
   }, []);
@@ -92,7 +64,7 @@ export default function FinancePage() {
       setExpenses(await expensesRes.json());
       setIncomes(await incomesRes.json());
       setPlanned(await plannedRes.json());
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки данных');
     } finally {
       setLoading(false);
@@ -105,12 +77,11 @@ export default function FinancePage() {
       const data = await res.json();
       setChartData(data.chartData);
       setTotals(data.totals);
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки графиков');
     }
   };
 
-  // Добавление расходов
   const addExpense = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -135,12 +106,11 @@ export default function FinancePage() {
         });
         fetchChartData();
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при добавлении');
     }
   };
 
-  // Добавление доходов
   const addIncome = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -164,12 +134,11 @@ export default function FinancePage() {
         });
         fetchChartData();
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при добавлении');
     }
   };
 
-  // Добавление планируемых расходов
   const addPlanned = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -192,12 +161,11 @@ export default function FinancePage() {
           plannedDate: new Date().toISOString().split('T')[0]
         });
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при добавлении');
     }
   };
 
-  // Удаление планируемого расхода
   const deletePlanned = async (id: string) => {
     if (!confirm('Удалить планируемый расход?')) return;
     
@@ -211,17 +179,15 @@ export default function FinancePage() {
       if (res.ok) {
         setPlanned(prev => prev.filter(p => p._id !== id));
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при удалении');
     }
   };
 
-  // Форматирование даты
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('ru-RU');
   };
 
-  // Цвет для рациональности
   const getRationalityColor = (rating: number) => {
     if (rating >= 8) return '#ccff00';
     if (rating >= 5) return '#f2c94c';
@@ -235,7 +201,6 @@ export default function FinancePage() {
         <p>Управление доходами и расходами</p>
       </div>
 
-      {/* Блок с итогами */}
       <div className="totals-grid">
         <div className="total-card income">
           <span className="total-label">Доходы</span>
@@ -251,7 +216,6 @@ export default function FinancePage() {
         </div>
       </div>
 
-      {/* График */}
       <div className="chart-section">
         <div className="chart-header">
           <h2>Динамика</h2>
@@ -297,7 +261,6 @@ export default function FinancePage() {
         </ResponsiveContainer>
       </div>
 
-      {/* Табы */}
       <div className="finance-tabs">
         <button 
           className={activeTab === 'expenses' ? 'active' : ''}
@@ -319,9 +282,7 @@ export default function FinancePage() {
         </button>
       </div>
 
-      {/* Формы и списки */}
       <div className="finance-content">
-        {/* РАСХОДЫ */}
         {activeTab === 'expenses' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -410,7 +371,6 @@ export default function FinancePage() {
           </motion.div>
         )}
 
-        {/* ДОХОДЫ */}
         {activeTab === 'incomes' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -471,7 +431,6 @@ export default function FinancePage() {
           </motion.div>
         )}
 
-        {/* ПЛАНИРУЕМЫЕ */}
         {activeTab === 'planned' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}

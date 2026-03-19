@@ -31,7 +31,7 @@ export default function DirectorLogin() {
         const data = await res.json();
         setError(data.error || 'Ошибка входа');
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка подключения');
     } finally {
       setLoading(false);

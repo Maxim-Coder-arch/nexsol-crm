@@ -16,49 +16,17 @@ import {
   Cell 
 } from 'recharts';
 import "../../styles/home/home.scss";
+import { 
+  Visitor, 
+  StatsData, 
+  ChartData, 
+  Expense, 
+  Income, 
+  FinanceTotals
+} from '@/types/mainVisitors.type';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-
-interface Visitor {
-  _id: string;
-  visitorId: string;
-  page: string;
-  referrer: string;
-  userAgent: string;
-  timestamp: string;
-}
-
-interface StatsData {
-  unique: { today: number; week: number; month: number };
-  total: { today: number; week: number; month: number };
-}
-
-interface ChartData {
-  day: string;
-  visitors: number;
-}
-
-interface VisitorsByDay {
-  [key: string]: number;
-}
-
-interface Expense {
-  amount: number;
-  description: string;
-  // другие поля не важны для сумм
-}
-
-interface Income {
-  amount: number;
-  description: string;
-}
-
-interface FinanceTotals {
-  expenses: number;
-  incomes: number;
-  profit: number;
-}
 
 const Main = () => {
   const [stats, setStats] = useState<StatsData | null>(null);
@@ -75,13 +43,6 @@ const Main = () => {
   const [recentExpenses, setRecentExpenses] = useState<Expense[]>([]);
   const [recentIncomes, setRecentIncomes] = useState<Income[]>([]);
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
-
-  const team = [
-    { initials: 'М', name: 'Максим', role: 'Технический директор, фронтенд разработчик, тимлид, стратег' },
-    { initials: 'З', name: 'Захар', role: 'Sales, маркетолог, менеджер по продажам, стратег' },
-    { initials: 'А', name: 'Артем', role: 'Дата аналитик, контент менеджер, проектировщик' },
-    { initials: 'В', name: 'Возможный сотрудник', role: 'Командный помощник' },
-  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -107,13 +68,10 @@ const Main = () => {
         setWeeklyData(chartData.weekly || []);
         setMonthlyData(chartData.monthly || []);
         setYearlyData(chartData.yearly || []);
-        setTeamMembers(usersData); // ← реальные сотрудники
-
-        // Сохраняем последние 3 операции
+        setTeamMembers(usersData);
         setRecentExpenses(expensesData.slice(0, 3));
         setRecentIncomes(incomesData.slice(0, 3));
 
-        // Считаем общие суммы
         const totalExpenses = expensesData.reduce((sum: number, e: Expense) => sum + e.amount, 0);
         const totalIncomes = incomesData.reduce((sum: number, i: Income) => sum + i.amount, 0);
         
@@ -135,7 +93,6 @@ const Main = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const COLORS = ['#f2c94c', '#60a5fa', '#ccff00', '#4a4a4a'];
 
   return (
     <div className="dashboard-main">
@@ -270,122 +227,119 @@ const Main = () => {
       </section>
 
       <section className="dashboard-section">
-  <h2>Финансы</h2>
-  <div className="finance-grid">
-    {/* Траты */}
-    <div className="finance-card expenses">
-      <h3>Последние траты</h3>
-      {recentExpenses.length > 0 ? (
-        recentExpenses.map((expense, idx) => (
-          <div key={idx} className="finance-item">
-            <span>{expense.description}</span>
-            <span>{expense.amount.toLocaleString()} ₽</span>
-          </div>
-        ))
-      ) : (
-        <div className="finance-item">
-          <span>Нет трат</span>
-          <span>0 ₽</span>
-        </div>
-      )}
-      <div className="finance-total">
-        <span>Всего трат</span>
-        <span>{financeTotals.expenses.toLocaleString()} ₽</span>
-      </div>
-    </div>
-
-    {/* Доходы */}
-    <div className="finance-card incomes">
-      <h3>Последние доходы</h3>
-      {recentIncomes.length > 0 ? (
-        recentIncomes.map((income, idx) => (
-          <div key={idx} className="finance-item">
-            <span>{income.description}</span>
-            <span>{income.amount.toLocaleString()} ₽</span>
-          </div>
-        ))
-      ) : (
-        <div className="finance-item">
-          <span>Нет доходов</span>
-          <span>0 ₽</span>
-        </div>
-      )}
-      <div className="finance-total">
-        <span>Всего доходов</span>
-        <span>{financeTotals.incomes.toLocaleString()} ₽</span>
-      </div>
-    </div>
-
-    {/* Прибыль */}
-    <div className="finance-card profit">
-      <h3>Общая прибыль</h3>
-      <div className="profit-value">
-        {financeTotals.profit.toLocaleString()} ₽
-      </div>
-      <div className="profit-chart">
-        <ResponsiveContainer width="100%" height={150}>
-          <PieChart>
-            <Pie
-              data={[
-                { name: 'Прибыль', value: Math.max(financeTotals.profit, 0) },
-                { name: 'Расходы', value: financeTotals.expenses }
-              ]}
-              cx="50%"
-              cy="50%"
-              innerRadius={40}
-              outerRadius={60}
-              paddingAngle={5}
-              dataKey="value"
-            >
-              <Cell fill={financeTotals.profit >= 0 ? "#f2c94c" : "#ff0000"} />
-              <Cell fill="#e42525" />
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-      <div className="finance-stats">
-        <div className="finance-stat">
-          <span>Доходы</span>
-          <span className="income-value">{financeTotals.incomes.toLocaleString()} ₽</span>
-        </div>
-        <div className="finance-stat">
-          <span>Расходы</span>
-          <span className="expense-value">{financeTotals.expenses.toLocaleString()} ₽</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-      <section className="dashboard-section">
-  <h2>Команда</h2>
-  <div className="team-grid">
-    {teamMembers.length > 0 ? (
-      teamMembers.map((member) => (
-        <div key={member._id} className="team-card">
-          <div className="team-avatar">
-            {member.name.charAt(0).toUpperCase()}
-          </div>
-          <div className="team-info">
-            <div className="team-name">{member.name}</div>
-            {member.specialties && member.specialties.length > 0 ? (
-              <div className="team-specialties">
-                {member.specialties.join(' • ')}
-              </div>
+        <h2>Финансы</h2>
+        <div className="finance-grid">
+          <div className="finance-card expenses">
+            <h3>Последние траты</h3>
+            {recentExpenses.length > 0 ? (
+              recentExpenses.map((expense, idx) => (
+                <div key={idx} className="finance-item">
+                  <span>{expense.description}</span>
+                  <span>{expense.amount.toLocaleString()} ₽</span>
+                </div>
+              ))
             ) : (
-              <div className="team-specialties team-specialties--empty">
-                Специальности не указаны
+              <div className="finance-item">
+                <span>Нет трат</span>
+                <span>0 ₽</span>
               </div>
             )}
+            <div className="finance-total">
+              <span>Всего трат</span>
+              <span>{financeTotals.expenses.toLocaleString()} ₽</span>
+            </div>
+          </div>
+
+          <div className="finance-card incomes">
+            <h3>Последние доходы</h3>
+            {recentIncomes.length > 0 ? (
+              recentIncomes.map((income, idx) => (
+                <div key={idx} className="finance-item">
+                  <span>{income.description}</span>
+                  <span>{income.amount.toLocaleString()} ₽</span>
+                </div>
+              ))
+            ) : (
+              <div className="finance-item">
+                <span>Нет доходов</span>
+                <span>0 ₽</span>
+              </div>
+            )}
+            <div className="finance-total">
+              <span>Всего доходов</span>
+              <span>{financeTotals.incomes.toLocaleString()} ₽</span>
+            </div>
+          </div>
+
+          <div className="finance-card profit">
+            <h3>Общая прибыль</h3>
+            <div className="profit-value">
+              {financeTotals.profit.toLocaleString()} ₽
+            </div>
+            <div className="profit-chart">
+              <ResponsiveContainer width="100%" height={150}>
+                <PieChart>
+                  <Pie
+                    data={[
+                      { name: 'Прибыль', value: Math.max(financeTotals.profit, 0) },
+                      { name: 'Расходы', value: financeTotals.expenses }
+                    ]}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={60}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    <Cell fill={financeTotals.profit >= 0 ? "#f2c94c" : "#ff0000"} />
+                    <Cell fill="#e42525" />
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="finance-stats">
+              <div className="finance-stat">
+                <span>Доходы</span>
+                <span className="income-value">{financeTotals.incomes.toLocaleString()} ₽</span>
+              </div>
+              <div className="finance-stat">
+                <span>Расходы</span>
+                <span className="expense-value">{financeTotals.expenses.toLocaleString()} ₽</span>
+              </div>
+            </div>
           </div>
         </div>
-      ))
-    ) : (
-      <div className="team-empty">Загрузка сотрудников...</div>
-    )}
-  </div>
-</section>
+      </section>
+
+      <section className="dashboard-section">
+        <h2>Команда</h2>
+        <div className="team-grid">
+          {teamMembers.length > 0 ? (
+            teamMembers.map((member) => (
+              <div key={member._id} className="team-card">
+                <div className="team-avatar">
+                  {member.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="team-info">
+                  <div className="team-name">{member.name}</div>
+                  {member.specialties && member.specialties.length > 0 ? (
+                    <div className="team-specialties">
+                      {member.specialties.join(' • ')}
+                    </div>
+                  ) : (
+                    <div className="team-specialties team-specialties--empty">
+                      Специальности не указаны
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="team-empty">Загрузка сотрудников...</div>
+          )}
+        </div>
+      </section>
 
       <section className="dashboard-section">
         <h2>Детальная статистика</h2>

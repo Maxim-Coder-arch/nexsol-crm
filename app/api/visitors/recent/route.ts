@@ -20,7 +20,7 @@ export async function GET(req: Request) {
       .toArray();
 
     return NextResponse.json(visitors);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch visitors' },
       { status: 500 }

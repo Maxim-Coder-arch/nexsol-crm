@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
 import { UserModel } from '@/lib/mongodb/models/crm/users';
-import { ObjectId } from 'mongodb';
 
 export async function GET() {
   try {
     const users = await UserModel.getAll();
     return NextResponse.json(users);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch users' },
       { status: 500 }
@@ -24,8 +23,6 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
-    // Проверяем, нет ли уже такого email
     const existing = await UserModel.findByEmail(email);
     if (existing) {
       return NextResponse.json(

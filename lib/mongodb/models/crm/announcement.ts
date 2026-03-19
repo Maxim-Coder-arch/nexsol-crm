@@ -6,7 +6,7 @@ export interface Announcement {
   author: string;
   title: string;
   content: string;
-  importance: number; // от 1 до 10
+  importance: number;
   createdAt: Date;
   updatedAt: Date;
 }

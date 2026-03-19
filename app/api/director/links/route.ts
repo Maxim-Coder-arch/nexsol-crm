@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const links = await LinkModel.getAll();
     return NextResponse.json(links);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch links' },
       { status: 500 }
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     });
     
     return NextResponse.json({ success: true, link });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create link' },
       { status: 500 }

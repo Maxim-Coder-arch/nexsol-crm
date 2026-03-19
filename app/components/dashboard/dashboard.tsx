@@ -75,15 +75,12 @@ const Dashboard = () => {
         const data = await res.json();
         
         if (data.authenticated) {
-          console.log('✅ Авторизован как:', data.user);
           setUserName(data.user);
           setIsAuthenticated(true);
           
-          // Загружаем данные
           await fetchStats();
           await fetchCounts();
         } else {
-          console.log('❌ Не авторизован');
           setIsAuthenticated(false);
           router.push('/login');
         }
@@ -118,11 +115,11 @@ const Dashboard = () => {
   };
 
   if (isAuthenticated === null) {
-    return null; // или прелоадер
+    return null;
   }
 
   if (!isAuthenticated) {
-    return null; // редирект уже произошел
+    return null;
   }
 
   return (

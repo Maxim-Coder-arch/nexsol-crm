@@ -1,23 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import "../../styles/director/responsibilities.scss";
-import TemplateBack from '@/app/components/template/template';
-
-interface Responsibility {
-  _id: string;
-  assignee: string;
-  tasks: string[];
-  createdAt: string;
-}
+import TemplateBack from "@/app/components/template/template";
+import { Responsibility } from "@/types/directorResponsibility.type";
 
 const ResponsibilitiesPage = () => {
-  const [responsibilities, setResponsibilities] = useState<Responsibility[]>([]);
-  const [newAssignee, setNewAssignee] = useState('');
-  const [newTasks, setNewTasks] = useState<string[]>(['']);
+  const [responsibilities, setResponsibilities] = useState<Responsibility[]>(
+    [],
+  );
+  const [newAssignee, setNewAssignee] = useState("");
+  const [newTasks, setNewTasks] = useState<string[]>([""]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTasks, setEditTasks] = useState<string[]>([]);
 
@@ -27,18 +23,18 @@ const ResponsibilitiesPage = () => {
 
   const fetchResponsibilities = async () => {
     try {
-      const res = await fetch('/api/director/responsibilities');
+      const res = await fetch("/api/director/responsibilities");
       const data = await res.json();
       setResponsibilities(data);
-    } catch (err) {
-      setError('Ошибка загрузки обязанностей');
+    } catch {
+      setError("Ошибка загрузки обязанностей");
     } finally {
       setLoading(false);
     }
   };
 
   const addTaskField = () => {
-    setNewTasks([...newTasks, '']);
+    setNewTasks([...newTasks, ""]);
   };
 
   const removeTaskField = (index: number) => {
@@ -55,55 +51,55 @@ const ResponsibilitiesPage = () => {
 
   const addResponsibility = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const filteredTasks = newTasks.filter(task => task.trim() !== '');
-    
+
+    const filteredTasks = newTasks.filter((task) => task.trim() !== "");
+
     if (!newAssignee || filteredTasks.length === 0) {
-      setError('Заполните имя и хотя бы одну обязанность');
+      setError("Заполните имя и хотя бы одну обязанность");
       return;
     }
 
     try {
-      const res = await fetch('/api/director/responsibilities', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/director/responsibilities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           assignee: newAssignee.trim(),
-          tasks: filteredTasks
-        })
+          tasks: filteredTasks,
+        }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setResponsibilities(prev => [data.responsibility, ...prev]);
-        setNewAssignee('');
-        setNewTasks(['']);
-        setError('');
+        setResponsibilities((prev) => [data.responsibility, ...prev]);
+        setNewAssignee("");
+        setNewTasks([""]);
+        setError("");
       } else {
-        setError(data.error || 'Ошибка при добавлении');
+        setError(data.error || "Ошибка при добавлении");
       }
-    } catch (err) {
-      setError('Ошибка при добавлении');
+    } catch {
+      setError("Ошибка при добавлении");
     }
   };
 
   const deleteResponsibility = async (id: string) => {
-    if (!confirm('Удалить обязанности этого сотрудника?')) return;
+    if (!confirm("Удалить обязанности этого сотрудника?")) return;
 
     try {
       const res = await fetch(`/api/director/responsibilities/${id}`, {
-        method: 'DELETE'
+        method: "DELETE",
       });
 
       if (res.ok) {
-        setResponsibilities(prev => prev.filter(r => r._id !== id));
+        setResponsibilities((prev) => prev.filter((r) => r._id !== id));
       } else {
         const data = await res.json();
-        setError(data.error || 'Ошибка при удалении');
+        setError(data.error || "Ошибка при удалении");
       }
-    } catch (err) {
-      setError('Ошибка при удалении');
+    } catch {
+      setError("Ошибка при удалении");
     }
   };
 
@@ -124,7 +120,7 @@ const ResponsibilitiesPage = () => {
   };
 
   const addTaskInEdit = () => {
-    setEditTasks([...editTasks, '']);
+    setEditTasks([...editTasks, ""]);
   };
 
   const removeTaskInEdit = (index: number) => {
@@ -134,40 +130,40 @@ const ResponsibilitiesPage = () => {
   };
 
   const saveEdit = async (id: string) => {
-    const filteredTasks = editTasks.filter(task => task.trim() !== '');
-    
+    const filteredTasks = editTasks.filter((task) => task.trim() !== "");
+
     if (filteredTasks.length === 0) {
-      setError('Должна быть хотя бы одна обязанность');
+      setError("Должна быть хотя бы одна обязанность");
       return;
     }
 
     try {
       const res = await fetch(`/api/director/responsibilities/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tasks: filteredTasks })
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tasks: filteredTasks }),
       });
 
       if (res.ok) {
-        setResponsibilities(prev => prev.map(r => 
-          r._id === id ? { ...r, tasks: filteredTasks } : r
-        ));
+        setResponsibilities((prev) =>
+          prev.map((r) => (r._id === id ? { ...r, tasks: filteredTasks } : r)),
+        );
         setEditingId(null);
         setEditTasks([]);
       } else {
         const data = await res.json();
-        setError(data.error || 'Ошибка при обновлении');
+        setError(data.error || "Ошибка при обновлении");
       }
-    } catch (err) {
-      setError('Ошибка при обновлении');
+    } catch {
+      setError("Ошибка при обновлении");
     }
   };
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
+    return new Date(date).toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
     });
   };
 
@@ -180,11 +176,10 @@ const ResponsibilitiesPage = () => {
           <p>Распределение задач между сотрудниками</p>
         </div>
 
-        {/* Форма добавления */}
         <div className="responsibilities__form-container">
           <form className="responsibilities__form" onSubmit={addResponsibility}>
             <h2>Новые обязанности</h2>
-            
+
             <div className="responsibilities__field">
               <label>Сотрудник</label>
               <input
@@ -230,12 +225,13 @@ const ResponsibilitiesPage = () => {
           </form>
         </div>
 
-        {/* Список обязанностей */}
         <div className="responsibilities__list">
           {loading ? (
             <div className="responsibilities__loading">Загрузка...</div>
           ) : responsibilities.length === 0 ? (
-            <div className="responsibilities__empty">Нет назначенных обязанностей</div>
+            <div className="responsibilities__empty">
+              Нет назначенных обязанностей
+            </div>
           ) : (
             responsibilities.map((item) => (
               <motion.div
@@ -276,7 +272,9 @@ const ResponsibilitiesPage = () => {
                         <input
                           type="text"
                           value={task}
-                          onChange={(e) => updateTaskInEdit(index, e.target.value)}
+                          onChange={(e) =>
+                            updateTaskInEdit(index, e.target.value)
+                          }
                           placeholder={`Обязанность ${index + 1}`}
                         />
                         <button

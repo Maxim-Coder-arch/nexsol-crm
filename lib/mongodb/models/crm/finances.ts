@@ -1,18 +1,16 @@
 import clientPromise from '../../index';
 import { ObjectId } from 'mongodb';
 
-// Расходы
 export interface Expense {
   _id?: ObjectId;
   author: string;
   description: string;
   amount: number;
-  date: string; // Дата в формате YYYY-MM-DD (ручной ввод)
-  rationality: number; // от 1 до 10
+  date: string;
+  rationality: number;
   createdAt: Date;
 }
 
-// Доходы
 export interface Income {
   _id?: ObjectId;
   author: string;
@@ -22,18 +20,16 @@ export interface Income {
   createdAt: Date;
 }
 
-// Планируемые расходы
 export interface PlannedExpense {
   _id?: ObjectId;
   author: string;
   description: string;
   amount: number;
-  plannedDate: string; // Дата когда планируется трата
+  plannedDate: string;
   createdAt: Date;
 }
 
 export class FinanceModel {
-  // ----- РАСХОДЫ -----
   static async addExpense(expense: Omit<Expense, '_id' | 'createdAt'>) {
     const client = await clientPromise;
     const db = client.db('nexsol');
@@ -57,7 +53,6 @@ export class FinanceModel {
       .toArray();
   }
 
-  // ----- ДОХОДЫ -----
   static async addIncome(income: Omit<Income, '_id' | 'createdAt'>) {
     const client = await clientPromise;
     const db = client.db('nexsol');
@@ -81,7 +76,6 @@ export class FinanceModel {
       .toArray();
   }
 
-  // ----- ПЛАНИРУЕМЫЕ РАСХОДЫ -----
   static async addPlannedExpense(expense: Omit<PlannedExpense, '_id' | 'createdAt'>) {
     const client = await clientPromise;
     const db = client.db('nexsol');
@@ -114,7 +108,6 @@ export class FinanceModel {
     });
   }
 
-  // ----- СТАТИСТИКА ДЛЯ ГРАФИКОВ -----
   static async getStatsForPeriod(startDate: Date, endDate: Date) {
     const client = await clientPromise;
     const db = client.db('nexsol');

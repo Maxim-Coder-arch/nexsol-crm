@@ -27,9 +27,6 @@ export default function DirectorFunnelsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [selectedFunnel, setSelectedFunnel] = useState<Funnel | null>(null);
-
-  // Форма для новой воронки
   const [newName, setNewName] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [newType, setNewType] = useState<'sales' | 'attraction' | 'b2b'>('sales');
@@ -46,7 +43,7 @@ export default function DirectorFunnelsPage() {
       const res = await fetch('/api/director/funnels');
       const data = await res.json();
       setFunnels(data);
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки');
     } finally {
       setLoading(false);
@@ -106,7 +103,7 @@ export default function DirectorFunnelsPage() {
         setFunnels(prev => [data.funnel, ...prev]);
         resetForm();
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при создании');
     }
   };
@@ -130,25 +127,15 @@ export default function DirectorFunnelsPage() {
       if (res.ok) {
         setFunnels(prev => prev.filter(f => f._id !== id));
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при удалении');
     }
   };
 
-  // Функция для расчета ширины этапов (каждый следующий чуть уже)
-  const getStageWidth = (index: number, total: number) => {
+  const getStageWidth = (index: number) => {
     const baseWidth = 100;
-    const decreasePerStep = 5; // каждый этап уже на 5%
+    const decreasePerStep = 5;
     return baseWidth - (index * decreasePerStep);
-  };
-
-  const getTypeLabel = (type: string) => {
-    switch(type) {
-      case 'tofu': return 'TOFU — Осведомленность';
-      case 'mofu': return 'MOFU — Интерес';
-      case 'bofu': return 'BOFU — Действие';
-      default: return type;
-    }
   };
 
   const getFunnelTypeLabel = (type: string) => {
@@ -169,7 +156,6 @@ export default function DirectorFunnelsPage() {
           <p>Создавайте и управляйте воронками продаж и привлечения</p>
         </div>
 
-        {/* Кнопка добавления */}
         <div className="director-funnels__action">
           <button 
             className="director-funnels__add-btn"
@@ -179,7 +165,6 @@ export default function DirectorFunnelsPage() {
           </button>
         </div>
 
-        {/* Форма создания */}
         <AnimatePresence>
           {showForm && (
             <motion.form 
@@ -274,7 +259,6 @@ export default function DirectorFunnelsPage() {
           )}
         </AnimatePresence>
 
-        {/* Список воронок */}
         <div className="director-funnels__list">
           {loading ? (
             <div className="director-funnels__loading">Загрузка...</div>
@@ -305,13 +289,12 @@ export default function DirectorFunnelsPage() {
 
                 <p className="director-funnels__card-description">{funnel.description}</p>
 
-                {/* Визуализация воронки */}
                 <div className="director-funnels__visualization">
                   {funnel.stages.sort((a, b) => a.order - b.order).map((stage, idx) => (
                     <div 
                       key={stage.id}
                       className="director-funnels__stage-visual"
-                      style={{ width: `${getStageWidth(idx, funnel.stages.length)}%` }}
+                      style={{ width: `${getStageWidth(idx)}%` }}
                     >
                       <div className={`director-funnels__stage-type ${stage.type}`}>
                         {stage.type.toUpperCase()}

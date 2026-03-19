@@ -23,8 +23,6 @@ export async function POST(request: Request) {
     const { message } = await request.json();
     const key = process.env.OPEN_ROUTER_KEY;
 
-    console.log('📨 Запрос к Open Router:', { message });
-
     if (!key) {
       console.error('❌ Ключ не найден');
       return NextResponse.json(
@@ -50,8 +48,6 @@ export async function POST(request: Request) {
       })
     });
 
-    console.log('📊 Статус ответа:', response.status);
-
     if (!response.ok) {
       const errorText = await response.text();
       console.error('❌ Ошибка Open Router:', response.status, errorText);
@@ -62,9 +58,6 @@ export async function POST(request: Request) {
     }
 
     const data = await response.json();
-    console.log('✅ Ответ от Open Router:', JSON.stringify(data, null, 2));
-
-    // Проверяем разные варианты получения ответа
     const reply = data.choices?.[0]?.message?.content || 
                   data.choices?.[0]?.text || 
                   data.response || 
@@ -73,7 +66,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ reply, raw: data });
     
   } catch (error) {
-    console.error('💥 Ошибка:', error);
     return NextResponse.json(
       { error: 'Failed to process chat', details: String(error) },
       { status: 500 }

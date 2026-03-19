@@ -3,13 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import "../../styles/chat/chat.scss";
-
-interface Message {
-  id: string;
-  text: string;
-  sender: 'user' | 'ai';
-  timestamp: Date;
-}
+import { Message } from '@/types/message.type';
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([
@@ -63,7 +57,7 @@ export default function ChatPage() {
       };
 
       setMessages(prev => [...prev, aiMessage]);
-    } catch (error) {
+    } catch {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: 'Произошла ошибка. Попробуйте позже.',

@@ -1,40 +1,28 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import "../../styles/director/tools.scss";
-import TemplateBack from '@/app/components/template/template';
-
-interface Tool {
-  _id: string;
-  name: string;
-  description: string;
-  url: string;
-  category: string;
-  icon: string;
-  createdBy: string;
-  createdAt: string;
-}
+import TemplateBack from "@/app/components/template/template";
+import { Tool } from "@/types/directorTool.type";
 
 export default function DirectorToolsPage() {
   const [tools, setTools] = useState<Tool[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
-
-  // Форма
-  const [newName, setNewName] = useState('');
-  const [newDescription, setNewDescription] = useState('');
-  const [newUrl, setNewUrl] = useState('');
-  const [newCategory, setNewCategory] = useState<string>('dev');
-  const [newIcon, setNewIcon] = useState('🔧');
+  const [newName, setNewName] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newUrl, setNewUrl] = useState("");
+  const [newCategory, setNewCategory] = useState<string>("dev");
+  const [newIcon, setNewIcon] = useState("🔧");
 
   const categories = [
-    { id: 'design', name: 'Дизайн', icon: '🎨' },
-    { id: 'dev', name: 'Разработка', icon: '💻' },
-    { id: 'marketing', name: 'Маркетинг', icon: '📢' },
-    { id: 'analytics', name: 'Аналитика', icon: '📊' },
-    { id: 'other', name: 'Другое', icon: '🔧' },
+    { id: "design", name: "Дизайн", icon: "🎨" },
+    { id: "dev", name: "Разработка", icon: "💻" },
+    { id: "marketing", name: "Маркетинг", icon: "📢" },
+    { id: "analytics", name: "Аналитика", icon: "📊" },
+    { id: "other", name: "Другое", icon: "🔧" },
   ];
 
   useEffect(() => {
@@ -43,11 +31,11 @@ export default function DirectorToolsPage() {
 
   const fetchTools = async () => {
     try {
-      const res = await fetch('/api/director/tools');
+      const res = await fetch("/api/director/tools");
       const data = await res.json();
       setTools(data);
-    } catch (err) {
-      setError('Ошибка загрузки');
+    } catch {
+      setError("Ошибка загрузки");
     } finally {
       setLoading(false);
     }
@@ -55,64 +43,64 @@ export default function DirectorToolsPage() {
 
   const addTool = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!newName || !newDescription || !newUrl || !newCategory) {
-      setError('Заполните все поля');
+      setError("Заполните все поля");
       return;
     }
 
     try {
-      const res = await fetch('/api/director/tools', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/director/tools", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: newName,
           description: newDescription,
           url: newUrl,
           category: newCategory,
-          icon: newIcon
-        })
+          icon: newIcon,
+        }),
       });
 
       if (res.ok) {
         const data = await res.json();
-        setTools(prev => [data.tool, ...prev]);
-        setNewName('');
-        setNewDescription('');
-        setNewUrl('');
-        setNewCategory('dev');
-        setNewIcon('🔧');
+        setTools((prev) => [data.tool, ...prev]);
+        setNewName("");
+        setNewDescription("");
+        setNewUrl("");
+        setNewCategory("dev");
+        setNewIcon("🔧");
         setShowForm(false);
       }
-    } catch (err) {
-      setError('Ошибка при добавлении');
+    } catch {
+      setError("Ошибка при добавлении");
     }
   };
 
   const deleteTool = async (id: string) => {
-    if (!confirm('Удалить инструмент?')) return;
+    if (!confirm("Удалить инструмент?")) return;
 
     try {
       const res = await fetch(`/api/director/tools/${id}`, {
-        method: 'DELETE'
+        method: "DELETE",
       });
 
       if (res.ok) {
-        setTools(prev => prev.filter(t => t._id !== id));
+        setTools((prev) => prev.filter((t) => t._id !== id));
       }
-    } catch (err) {
-      setError('Ошибка при удалении');
+    } catch {
+      setError("Ошибка при удалении");
     }
   };
 
   const getCategoryName = (cat: string) => {
-    const category = categories.find(c => c.id === cat);
+    const category = categories.find((c) => c.id === cat);
     return category ? category.name : cat;
   };
 
   const getCategoryIcon = (cat: string) => {
-    const category = categories.find(c => c.id === cat);
-    return category ? category.icon : '🔧';
+    const category = categories.find((c) => c.id === cat);
+    return category ? category.icon : "🔧";
   };
 
   return (
@@ -124,24 +112,22 @@ export default function DirectorToolsPage() {
           <p>Добавляйте полезные сервисы для команды</p>
         </div>
 
-        {/* Кнопка добавления */}
         <div className="director-tools__action">
-          <button 
+          <button
             className="director-tools__add-btn"
             onClick={() => setShowForm(!showForm)}
           >
-            {showForm ? '−' : '+'} Новый инструмент
+            {showForm ? "−" : "+"} Новый инструмент
           </button>
         </div>
 
-        {/* Форма добавления */}
         <AnimatePresence>
           {showForm && (
-            <motion.form 
+            <motion.form
               className="director-tools__form"
               onSubmit={addTool}
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
             >
               <h2>Новый инструмент</h2>
@@ -181,8 +167,11 @@ export default function DirectorToolsPage() {
 
               <div className="director-tools__field">
                 <label>Категория</label>
-                <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)}>
-                  {categories.map(cat => (
+                <select
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                >
+                  {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
                       {cat.icon} {cat.name}
                     </option>
@@ -208,7 +197,6 @@ export default function DirectorToolsPage() {
           )}
         </AnimatePresence>
 
-        {/* Список инструментов */}
         <div className="director-tools__list">
           {loading ? (
             <div className="director-tools__loading">Загрузка...</div>
@@ -239,7 +227,8 @@ export default function DirectorToolsPage() {
                   </a>
                   <div className="director-tools__card-meta">
                     <span className="director-tools__card-category">
-                      {getCategoryIcon(tool.category)} {getCategoryName(tool.category)}
+                      {getCategoryIcon(tool.category)}{" "}
+                      {getCategoryName(tool.category)}
                     </span>
                     <span className="director-tools__card-author">
                       Добавил: {tool.createdBy}

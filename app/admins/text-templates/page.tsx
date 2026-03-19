@@ -3,35 +3,19 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import "../../styles/text-templates/textTemplates.scss";
-
-interface Template {
-  _id: string;
-  author: string;
-  title: string;
-  content: string;
-  category: 'attraction' | 'answers' | 'ads' | 'essential';
-  createdAt: string;
-}
-
-type CategoryType = 'all' | 'attraction' | 'answers' | 'ads' | 'essential';
+import { Template, CategoryType } from '@/types/textTemplate.type';
 
 const TemplatesPage = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [activeCategory, setActiveCategory] = useState<CategoryType>('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
-  // Форма добавления
   const [newAuthor, setNewAuthor] = useState('');
   const [newTitle, setNewTitle] = useState('');
   const [newContent, setNewContent] = useState('');
   const [newCategory, setNewCategory] = useState<'attraction' | 'answers' | 'ads' | 'essential'>('attraction');
   const [showForm, setShowForm] = useState(false);
-
-  // Копирование в буфер
   const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  // Категории (без иконок)
   const categories = [
     { id: 'all', name: 'Все шаблоны' },
     { id: 'attraction', name: 'Привлечение клиентов' },
@@ -49,7 +33,7 @@ const TemplatesPage = () => {
       const res = await fetch('/api/templates');
       const data = await res.json();
       setTemplates(data);
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки шаблонов');
     } finally {
       setLoading(false);
@@ -89,7 +73,7 @@ const TemplatesPage = () => {
       } else {
         setError(data.error || 'Ошибка при добавлении');
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при добавлении');
     }
   };
@@ -105,7 +89,7 @@ const TemplatesPage = () => {
       if (res.ok) {
         setTemplates(prev => prev.filter(t => t._id !== id));
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при удалении');
     }
   };
@@ -146,7 +130,6 @@ const TemplatesPage = () => {
         <p>База готовых текстов для работы с клиентами</p>
       </div>
 
-      {/* Кнопка добавления */}
       <div className="templates__action">
         <button 
           className="templates__add-btn"
@@ -156,7 +139,6 @@ const TemplatesPage = () => {
         </button>
       </div>
 
-      {/* Форма добавления */}
       <AnimatePresence>
         {showForm && (
           <motion.form 
@@ -213,7 +195,6 @@ const TemplatesPage = () => {
         )}
       </AnimatePresence>
 
-      {/* Категории (без иконок) */}
       <div className="templates__categories">
         {categories.map((cat) => (
           <button
@@ -226,7 +207,6 @@ const TemplatesPage = () => {
         ))}
       </div>
 
-      {/* Список шаблонов */}
       <div className="templates__list">
         {loading ? (
           <div className="templates__loading">Загрузка шаблонов...</div>

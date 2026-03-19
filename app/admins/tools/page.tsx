@@ -3,17 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import "../../styles/tools/tools.scss";
-
-interface Tool {
-  _id: string;
-  name: string;
-  description: string;
-  url: string;
-  category: string;
-  icon: string;
-  createdBy: string;
-  createdAt: string;
-}
+import { Tool } from '@/types/tool.type';
 
 export default function ToolsPage() {
   const [tools, setTools] = useState<Tool[]>([]);
@@ -39,7 +29,7 @@ export default function ToolsPage() {
       const res = await fetch('/api/tools');
       const data = await res.json();
       setTools(data);
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки');
     } finally {
       setLoading(false);
@@ -62,7 +52,6 @@ export default function ToolsPage() {
         <p>Полезные сервисы для работы</p>
       </div>
 
-      {/* Фильтры */}
       <div className="tools__categories">
         {categories.map((cat) => (
           <button
@@ -75,7 +64,6 @@ export default function ToolsPage() {
         ))}
       </div>
 
-      {/* Список инструментов */}
       <div className="tools__list">
         {loading ? (
           <div className="tools__loading">Загрузка...</div>

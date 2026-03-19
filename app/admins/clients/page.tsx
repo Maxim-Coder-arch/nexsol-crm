@@ -3,25 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import "../../styles/clients/clietns.scss";
-
-interface Client {
-  _id: string;
-  name: string;
-  request: string;
-  service: string;
-  comment?: string;
-  payment: number;
-  contacts: {
-    telegram?: string;
-    instagram?: string;
-    whatsapp?: string;
-    email?: string;
-    phone?: string;
-    other?: string;
-  };
-  timeSpent: number;
-  createdAt: string;
-}
+import { Client } from '@/types/client.type';
 
 export default function ClientsPage() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -29,16 +11,12 @@ export default function ClientsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
-
-  // Форма
   const [newName, setNewName] = useState('');
   const [newRequest, setNewRequest] = useState('');
   const [newService, setNewService] = useState('');
   const [newComment, setNewComment] = useState('');
   const [newPayment, setNewPayment] = useState('');
   const [newTimeSpent, setNewTimeSpent] = useState('');
-  
-  // Контакты
   const [newTelegram, setNewTelegram] = useState('');
   const [newInstagram, setNewInstagram] = useState('');
   const [newWhatsapp, setNewWhatsapp] = useState('');
@@ -59,7 +37,7 @@ export default function ClientsPage() {
 
       setClients(await clientsRes.json());
       setStats(await statsRes.json());
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки');
     } finally {
       setLoading(false);
@@ -99,7 +77,6 @@ export default function ClientsPage() {
       if (res.ok) {
         const data = await res.json();
         setClients(prev => [data.client, ...prev]);
-        // Очистка формы
         setNewName('');
         setNewRequest('');
         setNewService('');
@@ -113,9 +90,9 @@ export default function ClientsPage() {
         setNewPhone('');
         setNewOther('');
         setShowForm(false);
-        fetchData(); // Обновим статистику
+        fetchData();
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при добавлении');
     }
   };
@@ -130,9 +107,9 @@ export default function ClientsPage() {
 
       if (res.ok) {
         setClients(prev => prev.filter(c => c._id !== id));
-        fetchData(); // Обновим статистику
+        fetchData();
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при удалении');
     }
   };
@@ -160,7 +137,6 @@ export default function ClientsPage() {
         <p>История сотрудничества и контакты</p>
       </div>
 
-      {/* Статистика */}
       <div className="clients__stats">
         <div className="clients__stat-card">
           <span className="clients__stat-label">Всего клиентов</span>
@@ -176,7 +152,6 @@ export default function ClientsPage() {
         </div>
       </div>
 
-      {/* Кнопка добавления */}
       <div className="clients__action">
         <button 
           className="clients__add-btn"
@@ -186,7 +161,6 @@ export default function ClientsPage() {
         </button>
       </div>
 
-      {/* Форма добавления */}
       <AnimatePresence>
         {showForm && (
           <motion.form 
@@ -309,7 +283,6 @@ export default function ClientsPage() {
         )}
       </AnimatePresence>
 
-      {/* Список клиентов */}
       <div className="clients__list">
         {loading ? (
           <div className="clients__loading">Загрузка...</div>
@@ -368,7 +341,6 @@ export default function ClientsPage() {
                   <span className="clients__card-value">{client.timeSpent} ч</span>
                 </div>
 
-                {/* Контакты */}
                 <div className="clients__card-contacts">
                   <span className="clients__card-label">Контакты:</span>
                   <div className="clients__card-contact-list">

@@ -26,7 +26,7 @@ export async function GET(
     }
     
     return NextResponse.json(funnel);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch funnel' },
       { status: 500 }
@@ -60,7 +60,7 @@ export async function PUT(
     }
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to update funnel' },
       { status: 500 }
@@ -92,7 +92,7 @@ export async function DELETE(
     }
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to delete funnel' },
       { status: 500 }

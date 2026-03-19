@@ -12,7 +12,6 @@ export async function POST(request: Request) {
       );
     }
     
-    // Ищем пользователя по email
     const user = await UserModel.findByEmail(email);
     
     if (!user) {
@@ -22,7 +21,6 @@ export async function POST(request: Request) {
       );
     }
     
-    // Проверяем пароль
     const isValid = await UserModel.comparePassword(password, user.password);
     
     if (!isValid) {
@@ -32,7 +30,6 @@ export async function POST(request: Request) {
       );
     }
     
-    // Устанавливаем куки
     const response = NextResponse.json({ 
       success: true,
       user: {

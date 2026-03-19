@@ -6,7 +6,7 @@ export interface Idea {
   title: string;
   description: string;
   author: string;
-  priority: number; // от 1 до 5
+  priority: number;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const stats = await TimeModel.getStats();
     return NextResponse.json(stats);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch stats' },
       { status: 500 }

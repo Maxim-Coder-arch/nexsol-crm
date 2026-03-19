@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import "../styles/login/login.scss";
 
@@ -10,11 +10,8 @@ export default function LoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  const router = useRouter();
   const searchParams = useSearchParams();
   const from = searchParams.get('from') || '/';
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -30,15 +27,13 @@ export default function LoginForm() {
       const data = await res.json();
 
       if (res.ok) {
-        // Даем время кукам сохраниться
         await new Promise(resolve => setTimeout(resolve, 500));
         
-        // Редирект
         window.location.href = from;
       } else {
         setError(data.error || 'Неверный email или пароль');
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка подключения');
     } finally {
       setLoading(false);

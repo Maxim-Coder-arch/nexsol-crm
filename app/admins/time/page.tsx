@@ -1,19 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import "../../styles/time/time.scss";
-
-interface TimeEntry {
-  _id: string;
-  author: string;
-  task: string;
-  description?: string;
-  difficulty: number;
-  startTime: string;
-  endTime?: string;
-  duration?: number;
-}
+import { TimeEntry } from '@/types/timeEntry.type';
 
 export default function TimePage() {
   const [entries, setEntries] = useState<TimeEntry[]>([]);
@@ -21,8 +11,6 @@ export default function TimePage() {
   const [stats, setStats] = useState({ day: 0, week: 0, month: 0, total: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
-  // Форма ручного ввода
   const [manualAuthor, setManualAuthor] = useState('');
   const [manualTask, setManualTask] = useState('');
   const [manualDescription, setManualDescription] = useState('');
@@ -31,8 +19,6 @@ export default function TimePage() {
   const [manualStartTime, setManualStartTime] = useState('');
   const [manualEndDate, setManualEndDate] = useState('');
   const [manualEndTime, setManualEndTime] = useState('');
-
-  // Таймер
   const [timerAuthor, setTimerAuthor] = useState('');
   const [timerTask, setTimerTask] = useState('');
   const [timerDescription, setTimerDescription] = useState('');
@@ -68,7 +54,7 @@ export default function TimePage() {
       }
       
       setStats(await statsRes.json());
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки');
     } finally {
       setLoading(false);
@@ -105,7 +91,7 @@ export default function TimePage() {
         setTimerDifficulty(5);
         fetchData();
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при старте');
     }
   };
@@ -125,7 +111,7 @@ export default function TimePage() {
         setTimerStart(null);
         fetchData();
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при остановке');
     }
   };
@@ -174,7 +160,7 @@ export default function TimePage() {
         setManualEndTime('');
         fetchData();
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при добавлении');
     }
   };
@@ -209,7 +195,6 @@ export default function TimePage() {
         <p>Трекинг задач и трудозатрат</p>
       </div>
 
-      {/* Статистика */}
       <div className="time__stats">
         <div className="time__stat-card">
           <span className="time__stat-label">Сегодня</span>
@@ -229,7 +214,6 @@ export default function TimePage() {
         </div>
       </div>
 
-      {/* Активный таймер */}
       {activeTimer ? (
         <div className="time__active">
           <div className="time__active-info">
@@ -247,10 +231,7 @@ export default function TimePage() {
           <h3>Нет активной задачи</h3>
         </div>
       )}
-
-      {/* Формы */}
       <div className="time__forms">
-        {/* Таймер */}
         <div className="time__form time__form--timer">
           <h2>Запустить таймер</h2>
           <input
@@ -284,7 +265,6 @@ export default function TimePage() {
           <button onClick={startTimer}>Старт</button>
         </div>
 
-        {/* Ручной ввод */}
         <div className="time__form time__form--manual">
           <h2>Добавить вручную</h2>
           <form onSubmit={addManualEntry}>
@@ -365,7 +345,6 @@ export default function TimePage() {
         </div>
       </div>
 
-      {/* История записей */}
       <div className="time__history">
         <h2>История</h2>
         <div className="time__entries">

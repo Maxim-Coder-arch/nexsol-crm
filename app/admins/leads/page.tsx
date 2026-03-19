@@ -3,17 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import "../../styles/leads/leads.scss";
-
-interface Lead {
-  _id: string;
-  name: string;
-  email: string;
-  contact: string;
-  message?: string;
-  status: 'new' | 'contacted' | 'converted' | 'lost';
-  source: string;
-  createdAt: string;
-}
+import { Lead } from '@/types/lead.type';
 
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -34,7 +24,7 @@ export default function LeadsPage() {
 
       setLeads(await leadsRes.json());
       setStats(await statsRes.json());
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки');
     } finally {
       setLoading(false);
@@ -52,7 +42,7 @@ export default function LeadsPage() {
       if (res.ok) {
         fetchData();
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка обновления');
     }
   };
@@ -94,7 +84,6 @@ export default function LeadsPage() {
         <p>Потенциальные клиенты</p>
       </div>
 
-      {/* Статистика */}
       <div className="leads__stats">
         <div className="leads__stat-card">
           <span className="leads__stat-label">Всего</span>
@@ -122,7 +111,6 @@ export default function LeadsPage() {
         </div>
       </div>
 
-      {/* Список заявок */}
       <div className="leads__list">
         {loading ? (
           <div className="leads__loading">Загрузка...</div>
@@ -141,7 +129,6 @@ export default function LeadsPage() {
                   <h3 className="leads__card-name">{lead.name}</h3>
                   <span className="leads__card-date">{formatDate(lead.createdAt)}</span>
                 </div>
-                {/* Кнопка удаления УБРАНА */}
               </div>
 
               <div className="leads__card-content">

@@ -10,16 +10,12 @@ export async function GET() {
     const db = client.db('nexsol');
     
     const now = new Date();
-    
-    // За последние 7 дней
     const weekAgo = new Date(now);
     weekAgo.setDate(weekAgo.getDate() - 7);
-    
-    // За последние 4 недели
+
     const monthAgo = new Date(now);
     monthAgo.setMonth(monthAgo.getMonth() - 1);
-    
-    // За последние 6 месяцев
+
     const yearAgo = new Date(now);
     yearAgo.setMonth(yearAgo.getMonth() - 6);
     

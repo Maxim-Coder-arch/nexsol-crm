@@ -5,7 +5,7 @@ export interface Achievement {
   _id?: ObjectId;
   title: string;
   description: string;
-  rating: number; // от 1 до 10
+  rating: number;
   date: Date;
   createdAt: Date;
   updatedAt: Date;

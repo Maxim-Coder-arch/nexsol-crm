@@ -3,14 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import "../../styles/achievements/achievements.scss";
-
-interface Achievement {
-  _id: string;
-  title: string;
-  description: string;
-  rating: number;
-  date: string;
-}
+import { Achievement } from '@/types/achievement.type';
 
 export default function AchievementsPage() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
@@ -19,27 +12,25 @@ export default function AchievementsPage() {
   const [newRating, setNewRating] = useState<number>(5);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  // Добавь эти переменные рядом с другими useState
 const [stats, setStats] = useState({
   total: 0,
   averageRating: 0,
   highestRated: null as Achievement | null
 });
 
-// В useEffect, после fetchAchievements добавь:
-useEffect(() => {
-  if (achievements.length > 0) {
-    const total = achievements.length;
-    const avgRating = achievements.reduce((acc, curr) => acc + curr.rating, 0) / total;
-    const highest = achievements.reduce((max, curr) => curr.rating > (max?.rating || 0) ? curr : max, null);
-    
-    setStats({
-      total,
-      averageRating: Math.round(avgRating * 10) / 10,
-      highestRated: highest
-    });
-  }
-}, [achievements]);
+  useEffect(() => {
+    if (achievements.length > 0) {
+      const total = achievements.length;
+      const avgRating = achievements.reduce((acc, curr) => acc + curr.rating, 0) / total;
+      const highest = achievements.reduce((max, curr) => curr.rating > (max?.rating || 0) ? curr : max, null);
+      
+      setStats({
+        total,
+        averageRating: Math.round(avgRating * 10) / 10,
+        highestRated: highest
+      });
+    }
+  }, [achievements]);
 
   useEffect(() => {
     fetchAchievements();
@@ -50,7 +41,7 @@ useEffect(() => {
       const res = await fetch('/api/achievements');
       const data = await res.json();
       setAchievements(data);
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки');
     } finally {
       setLoading(false);
@@ -83,7 +74,7 @@ useEffect(() => {
         const data = await res.json();
         setError(data.error || 'Ошибка при добавлении');
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при добавлении');
     }
   };
@@ -102,7 +93,7 @@ useEffect(() => {
         const data = await res.json();
         setError(data.error || 'Ошибка при удалении');
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при удалении');
     }
   };
@@ -115,11 +106,10 @@ useEffect(() => {
     });
   };
 
-  // Функция для цвета шкалы в зависимости от рейтинга
   const getRatingColor = (rating: number) => {
-    if (rating >= 8) return '#ccff00'; // зеленый
-    if (rating >= 5) return '#f2c94c'; // желтый
-    return '#60a5fa'; // синий
+    if (rating >= 8) return '#ccff00';
+    if (rating >= 5) return '#f2c94c';
+    return '#60a5fa';
   };
 
   return (
@@ -130,29 +120,29 @@ useEffect(() => {
       </div>
 
       {achievements.length > 0 && (
-  <div className="stats-overview">
-    <div className="stat-badge">
-      <div className="stat-info">
-        <span className="stat-label">Всего достижений</span>
-        <span className="stat-value">{stats.total}</span>
-      </div>
-    </div>
-    <div className="stat-badge">
-      <div className="stat-info">
-        <span className="stat-label">Средний рейтинг</span>
-        <span className="stat-value">{stats.averageRating}</span>
-      </div>
-    </div>
-    {stats.highestRated && (
-      <div className="stat-badge">
-        <div className="stat-info">
-          <span className="stat-label">Лучшее</span>
-          <span className="stat-value">{stats.highestRated.rating}/10</span>
+        <div className="stats-overview">
+          <div className="stat-badge">
+            <div className="stat-info">
+              <span className="stat-label">Всего достижений</span>
+              <span className="stat-value">{stats.total}</span>
+            </div>
+          </div>
+          <div className="stat-badge">
+            <div className="stat-info">
+              <span className="stat-label">Средний рейтинг</span>
+              <span className="stat-value">{stats.averageRating}</span>
+            </div>
+          </div>
+          {stats.highestRated && (
+            <div className="stat-badge">
+              <div className="stat-info">
+                <span className="stat-label">Лучшее</span>
+                <span className="stat-value">{stats.highestRated.rating}/10</span>
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-    )}
-  </div>
-)}
+      )}
 
       <form onSubmit={addAchievement} className="add-form">
         <input

@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const entries = await TimeModel.getAll();
     return NextResponse.json(entries);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch time entries' },
       { status: 500 }
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     });
     
     return NextResponse.json({ success: true, entry });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create time entry' },
       { status: 500 }

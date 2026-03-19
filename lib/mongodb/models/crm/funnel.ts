@@ -6,15 +6,15 @@ export interface FunnelStage {
   name: string;
   description: string;
   order: number;
-  type: 'tofu' | 'mofu' | 'bofu'; // TOFU, MOFU, BOFU
-  width?: number; // будет вычисляться на фронте
+  type: 'tofu' | 'mofu' | 'bofu';
+  width?: number;
 }
 
 export interface Funnel {
   _id?: ObjectId;
   name: string;
   description: string;
-  type: 'sales' | 'attraction' | 'b2b'; // тип воронки
+  type: 'sales' | 'attraction' | 'b2b';
   stages: FunnelStage[];
   createdAt: Date;
   updatedAt: Date;

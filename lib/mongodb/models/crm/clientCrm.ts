@@ -16,7 +16,7 @@ export interface Client {
     phone?: string;
     other?: string;
   };
-  timeSpent: string; // ← теперь строка! можно писать "7 дней", "3 часа", "2 недели"
+  timeSpent: string;
   createdAt: Date;
   updatedAt: Date;
 }

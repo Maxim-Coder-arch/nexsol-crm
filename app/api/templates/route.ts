@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     }
     
     return NextResponse.json(templates);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch templates' },
       { status: 500 }
@@ -29,7 +29,6 @@ export async function POST(request: Request) {
   try {
     const { author, title, content, category } = await request.json();
     
-    // Валидация
     if (!author || !title || !content || !category) {
       return NextResponse.json(
         { error: 'All fields are required' },
@@ -37,7 +36,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Проверяем, что категория допустимая
     const validCategories = ['attraction', 'answers', 'ads', 'essential'];
     if (!validCategories.includes(category)) {
       return NextResponse.json(
@@ -54,8 +52,7 @@ export async function POST(request: Request) {
     });
     
     return NextResponse.json({ success: true, template });
-  } catch (error) {
-    console.error('Failed to create template:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create template' },
       { status: 500 }

@@ -1,26 +1,23 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import "../../styles/director/leads.scss";
-import TemplateBack from '@/app/components/template/template';
-
-interface Lead {
-  _id: string;
-  name: string;
-  email: string;
-  contact: string;
-  message?: string;
-  status: 'new' | 'contacted' | 'converted' | 'lost';
-  source: string;
-  createdAt: string;
-}
+import TemplateBack from "@/app/components/template/template";
+import { Lead } from "@/types/directorLead.type";
 
 export default function DirectorLeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [stats, setStats] = useState({ total: 0, new: 0, contacted: 0, converted: 0, lost: 0, conversionRate: 0 });
+  const [stats, setStats] = useState({
+    total: 0,
+    new: 0,
+    contacted: 0,
+    converted: 0,
+    lost: 0,
+    conversionRate: 0,
+  });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -29,14 +26,14 @@ export default function DirectorLeadsPage() {
   const fetchData = async () => {
     try {
       const [leadsRes, statsRes] = await Promise.all([
-        fetch('/api/leads/manage'),
-        fetch('/api/leads/manage/stats')
+        fetch("/api/leads/manage"),
+        fetch("/api/leads/manage/stats"),
       ]);
 
       setLeads(await leadsRes.json());
       setStats(await statsRes.json());
-    } catch (err) {
-      setError('Ошибка загрузки');
+    } catch {
+      setError("Ошибка загрузки");
     } finally {
       setLoading(false);
     }
@@ -44,65 +41,75 @@ export default function DirectorLeadsPage() {
 
   const updateStatus = async (id: string, status: string) => {
     try {
-      const res = await fetch('/api/leads/manage', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, status })
+      const res = await fetch("/api/leads/manage", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status }),
       });
 
       if (res.ok) {
         fetchData();
       }
-    } catch (err) {
-      setError('Ошибка обновления');
+    } catch {
+      setError("Ошибка обновления");
     }
   };
 
   const deleteLead = async (id: string) => {
-    if (!confirm('Удалить заявку?')) return;
+    if (!confirm("Удалить заявку?")) return;
 
     try {
-      const res = await fetch('/api/leads/manage', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
+      const res = await fetch("/api/leads/manage", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
       });
 
       if (res.ok) {
         fetchData();
       }
-    } catch (err) {
-      setError('Ошибка удаления');
+    } catch {
+      setError("Ошибка удаления");
     }
   };
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(date).toLocaleString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getStatusColor = (status: string) => {
-    switch(status) {
-      case 'new': return '#f2c94c';
-      case 'contacted': return '#60a5fa';
-      case 'converted': return '#ccff00';
-      case 'lost': return '#ff6b6b';
-      default: return '#888';
+    switch (status) {
+      case "new":
+        return "#f2c94c";
+      case "contacted":
+        return "#60a5fa";
+      case "converted":
+        return "#ccff00";
+      case "lost":
+        return "#ff6b6b";
+      default:
+        return "#888";
     }
   };
 
   const getStatusLabel = (status: string) => {
-    switch(status) {
-      case 'new': return 'Новая';
-      case 'contacted': return 'Связались';
-      case 'converted': return 'Клиент';
-      case 'lost': return 'Потеря';
-      default: return status;
+    switch (status) {
+      case "new":
+        return "Новая";
+      case "contacted":
+        return "Связались";
+      case "converted":
+        return "Клиент";
+      case "lost":
+        return "Потеря";
+      default:
+        return status;
     }
   };
 
@@ -115,7 +122,6 @@ export default function DirectorLeadsPage() {
           <p>Для директора</p>
         </div>
 
-        {/* Статистика */}
         <div className="director-leads__stats">
           <div className="director-leads__stat-card">
             <span className="director-leads__stat-label">Всего</span>
@@ -127,11 +133,15 @@ export default function DirectorLeadsPage() {
           </div>
           <div className="director-leads__stat-card">
             <span className="director-leads__stat-label">В работе</span>
-            <span className="director-leads__stat-value">{stats.contacted}</span>
+            <span className="director-leads__stat-value">
+              {stats.contacted}
+            </span>
           </div>
           <div className="director-leads__stat-card">
             <span className="director-leads__stat-label">Клиенты</span>
-            <span className="director-leads__stat-value">{stats.converted}</span>
+            <span className="director-leads__stat-value">
+              {stats.converted}
+            </span>
           </div>
           <div className="director-leads__stat-card">
             <span className="director-leads__stat-label">Потеряно</span>
@@ -139,11 +149,12 @@ export default function DirectorLeadsPage() {
           </div>
           <div className="director-leads__stat-card">
             <span className="director-leads__stat-label">Конверсия</span>
-            <span className="director-leads__stat-value">{stats.conversionRate}%</span>
+            <span className="director-leads__stat-value">
+              {stats.conversionRate}%
+            </span>
           </div>
         </div>
 
-        {/* Список заявок */}
         <div className="director-leads__list">
           {loading ? (
             <div className="director-leads__loading">Загрузка...</div>
@@ -160,7 +171,9 @@ export default function DirectorLeadsPage() {
                 <div className="director-leads__card-header">
                   <div>
                     <h3 className="director-leads__card-name">{lead.name}</h3>
-                    <span className="director-leads__card-date">{formatDate(lead.createdAt)}</span>
+                    <span className="director-leads__card-date">
+                      {formatDate(lead.createdAt)}
+                    </span>
                   </div>
                   <button
                     className="director-leads__card-delete"
@@ -173,12 +186,22 @@ export default function DirectorLeadsPage() {
                 <div className="director-leads__card-content">
                   <div className="director-leads__card-row">
                     <span className="director-leads__card-label">Email:</span>
-                    <a href={`mailto:${lead.email}`} className="director-leads__card-link">{lead.email}</a>
+                    <a
+                      href={`mailto:${lead.email}`}
+                      className="director-leads__card-link"
+                    >
+                      {lead.email}
+                    </a>
                   </div>
-                  
+
                   <div className="director-leads__card-row">
                     <span className="director-leads__card-label">Контакт:</span>
-                    <a href={lead.contact} target="_blank" rel="noopener noreferrer" className="director-leads__card-link">
+                    <a
+                      href={lead.contact}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="director-leads__card-link"
+                    >
                       {lead.contact}
                     </a>
                   </div>
@@ -200,7 +223,7 @@ export default function DirectorLeadsPage() {
                       <option value="converted">Клиент</option>
                       <option value="lost">Потеря</option>
                     </select>
-                    <span 
+                    <span
                       className="director-leads__card-status"
                       style={{ backgroundColor: getStatusColor(lead.status) }}
                     >

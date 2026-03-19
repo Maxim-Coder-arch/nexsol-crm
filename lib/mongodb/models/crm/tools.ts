@@ -21,7 +21,6 @@ export class ToolModel {
   }
 
   static async create(data: Omit<Tool, '_id' | 'createdAt' | 'updatedAt'>) {
-    console.log('📝 ToolModel.create called with:', data);
     
     try {
       const collection = await this.getCollection();
@@ -33,10 +32,8 @@ export class ToolModel {
         updatedAt: now
       };
       
-      console.log('💾 Inserting tool:', tool);
       
       const result = await collection.insertOne(tool);
-      console.log('✅ Insert result:', result);
       
       return { ...tool, _id: result.insertedId };
     } catch (error) {

@@ -5,10 +5,10 @@ export interface Lead {
   _id?: ObjectId;
   name: string;
   email: string;
-  contact: string; // ссылка на соцсеть
-  message?: string; // дополнительное сообщение
+  contact: string;
+  message?: string;
   status: 'new' | 'contacted' | 'converted' | 'lost';
-  source: string; // откуда пришел (например, 'website')
+  source: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -20,7 +20,6 @@ export class LeadModel {
     return db.collection<Lead>('leads');
   }
 
-  // Создать новую заявку (публичный метод)
   static async create(data: Omit<Lead, '_id' | 'createdAt' | 'updatedAt' | 'status'>) {
     const collection = await this.getCollection();
     const now = new Date();
@@ -36,13 +35,11 @@ export class LeadModel {
     return { ...lead, _id: result.insertedId };
   }
 
-  // Получить все заявки (для админки)
   static async getAll() {
     const collection = await this.getCollection();
     return collection.find().sort({ createdAt: -1 }).toArray();
   }
 
-  // Обновить статус заявки
   static async updateStatus(id: string, status: Lead['status']) {
     const collection = await this.getCollection();
     
@@ -57,13 +54,11 @@ export class LeadModel {
     );
   }
 
-  // Удалить заявку
   static async delete(id: string) {
     const collection = await this.getCollection();
     return collection.deleteOne({ _id: new ObjectId(id) });
   }
 
-  // Получить статистику по заявкам
   static async getStats() {
     const collection = await this.getCollection();
     

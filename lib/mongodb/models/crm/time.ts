@@ -5,11 +5,11 @@ export interface TimeEntry {
   _id?: ObjectId;
   author: string;
   task: string;
-  description?: string; // комментарий (опционально)
-  difficulty: number; // от 1 до 10
+  description?: string;
+  difficulty: number;
   startTime: Date;
   endTime?: Date;
-  duration?: number; // в минутах (будем вычислять)
+  duration?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,7 +25,6 @@ export class TimeModel {
     const collection = await this.getCollection();
     const now = new Date();
     
-    // Вычисляем длительность, если есть endTime
     let duration;
     if (data.endTime) {
       duration = Math.round((data.endTime.getTime() - data.startTime.getTime()) / (1000 * 60));

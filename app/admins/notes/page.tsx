@@ -2,13 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import "../../styles/notes/notes.scss";
-
-interface Note {
-  _id: string;
-  author: string;
-  text: string;
-  createdAt: string;
-}
+import { Note } from '@/types/notes.type';
 
 export default function NotesPage() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -26,7 +20,7 @@ export default function NotesPage() {
       const res = await fetch('/api/notes');
       const data = await res.json();
       setNotes(data);
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки');
     } finally {
       setLoading(false);
@@ -54,7 +48,7 @@ export default function NotesPage() {
         const data = await res.json();
         setError(data.error || 'Ошибка при добавлении');
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при добавлении');
     }
   };
@@ -73,7 +67,7 @@ export default function NotesPage() {
         const data = await res.json();
         setError(data.error || 'Ошибка при удалении');
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при удалении');
     }
   };

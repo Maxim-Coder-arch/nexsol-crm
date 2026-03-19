@@ -29,7 +29,7 @@ export async function DELETE(
     }
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to delete idea' },
       { status: 500 }
@@ -63,7 +63,7 @@ export async function PUT(
     }
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to update idea' },
       { status: 500 }

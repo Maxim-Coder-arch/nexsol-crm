@@ -29,7 +29,7 @@ export async function DELETE(
     }
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to delete link' },
       { status: 500 }
@@ -63,7 +63,7 @@ export async function PUT(
     }
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to update link' },
       { status: 500 }

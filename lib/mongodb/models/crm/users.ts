@@ -8,8 +8,8 @@ export interface User {
   email: string;
   password: string;
   role: 'director' | 'admin' | 'manager';
-  specialties: string[];        // специальности
-  responsibilities: string[];    // обязанности
+  specialties: string[];
+  responsibilities: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -21,12 +21,10 @@ export class UserModel {
     return db.collection<User>('users');
   }
 
-  // Создать пользователя (с хэшированием пароля)
   static async create(data: Omit<User, '_id' | 'createdAt' | 'updatedAt'>) {
     const collection = await this.getCollection();
     const now = new Date();
     
-    // Хэшируем пароль
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(data.password, salt);
     
@@ -43,34 +41,28 @@ export class UserModel {
     return { ...user, _id: result.insertedId };
   }
 
-  // Найти пользователя по email
   static async findByEmail(email: string) {
     const collection = await this.getCollection();
     return collection.findOne({ email });
   }
 
-  // Проверить пароль
   static async comparePassword(candidatePassword: string, hashedPassword: string) {
     return bcrypt.compare(candidatePassword, hashedPassword);
   }
 
-  // Получить всех пользователей (без паролей)
   static async getAll() {
     const collection = await this.getCollection();
     return collection.find().project({ password: 0 }).toArray();
   }
 
-  // Получить пользователя по ID
   static async getById(id: string) {
     const collection = await this.getCollection();
     return collection.findOne({ _id: new ObjectId(id) }, { projection: { password: 0 } });
   }
 
-  // Обновить пользователя
   static async update(id: string, data: Partial<User>) {
     const collection = await this.getCollection();
     
-    // Если обновляем пароль — хэшируем
     if (data.password) {
       const salt = await bcrypt.genSalt(10);
       data.password = await bcrypt.hash(data.password, salt);
@@ -87,7 +79,6 @@ export class UserModel {
     );
   }
 
-  // Удалить пользователя
   static async delete(id: string) {
     const collection = await this.getCollection();
     return collection.deleteOne({ _id: new ObjectId(id) });

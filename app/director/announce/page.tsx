@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import "../../styles/director/announce.scss";
 import TemplateBack from '@/app/components/template/template';
 
@@ -32,7 +32,7 @@ const AnnouncePage = () => {
       const res = await fetch('/api/director/announcements');
       const data = await res.json();
       setAnnouncements(data);
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки объявлений');
     } finally {
       setLoading(false);
@@ -71,7 +71,7 @@ const AnnouncePage = () => {
       } else {
         setError(data.error || 'Ошибка при добавлении');
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при добавлении');
     }
   };
@@ -90,7 +90,7 @@ const AnnouncePage = () => {
         const data = await res.json();
         setError(data.error || 'Ошибка при удалении');
       }
-    } catch (err) {
+    } catch {
       setError('Ошибка при удалении');
     }
   };
@@ -127,7 +127,6 @@ const AnnouncePage = () => {
           <p>Важные сообщения и уведомления</p>
         </div>
 
-        {/* Форма добавления */}
         <div className="announce__form-container">
           <form className="announce__form" onSubmit={addAnnouncement}>
             <h2>Новое объявление</h2>
@@ -190,7 +189,6 @@ const AnnouncePage = () => {
           </form>
         </div>
 
-        {/* Список объявлений */}
         <div className="announce__list">
           {loading ? (
             <div className="announce__loading">Загрузка объявлений...</div>

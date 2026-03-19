@@ -9,12 +9,7 @@ import {
   initialExpenseItems 
 } from '../../../data/calculators.data';
 import "../../styles/calculators/calculators.scss";
-
-interface CostItem {
-  id: string;
-  name: string;
-  value: number;
-}
+import { CostItem } from '@/types/costItem.type';
 
 export default function CalculatorsPage() {
   const [services] = useState(servicesData);
@@ -44,8 +39,6 @@ export default function CalculatorsPage() {
       return newSelected;
     });
   };
-
-  // ========== КАЛЬКУЛЯТОР РЕНТАБЕЛЬНОСТИ ==========
   const [revenue, setRevenue] = useState<number>(100000);
   const [costs, setCosts] = useState<number>(60000);
   const [profit, setProfit] = useState<number>(40000);
@@ -67,7 +60,6 @@ export default function CalculatorsPage() {
     setMargin(revenue > 0 ? Math.round((newProfit / revenue) * 100) : 0);
   };
 
-  // ========== КАЛЬКУЛЯТОР СТОИМОСТИ ==========
   const [selectedPriceServices, setSelectedPriceServices] = useState<string[]>([]);
 
   const togglePriceService = (serviceId: string) => {
@@ -82,8 +74,6 @@ export default function CalculatorsPage() {
     const service = priceServicesData.find(s => s.id === id);
     return sum + (service?.price || 0);
   }, 0);
-
-  // ========== КАЛЬКУЛЯТОР ПРИБЫЛИ/УБЫТКОВ ==========
   const [incomeItems, setIncomeItems] = useState<CostItem[]>(initialIncomeItems);
   const [expenseItems, setExpenseItems] = useState<CostItem[]>(initialExpenseItems);
 
@@ -146,7 +136,6 @@ export default function CalculatorsPage() {
       </div>
 
       <div className="calculators__grid">
-        {/* ===== КАЛЬКУЛЯТОР СРОКОВ ===== */}
         <motion.div 
           className="calculator-card"
           initial={{ opacity: 0, y: 20 }}
@@ -205,7 +194,6 @@ export default function CalculatorsPage() {
           </div>
         </motion.div>
 
-        {/* ===== КАЛЬКУЛЯТОР РЕНТАБЕЛЬНОСТИ ===== */}
         <motion.div 
           className="calculator-card"
           initial={{ opacity: 0, y: 20 }}
@@ -256,7 +244,6 @@ export default function CalculatorsPage() {
           </div>
         </motion.div>
 
-        {/* ===== КАЛЬКУЛЯТОР СТОИМОСТИ ===== */}
         <motion.div 
           className="calculator-card"
           initial={{ opacity: 0, y: 20 }}
@@ -296,7 +283,6 @@ export default function CalculatorsPage() {
           </div>
         </motion.div>
 
-        {/* ===== КАЛЬКУЛЯТОР ПРИБЫЛИ/УБЫТКОВ ===== */}
         <motion.div 
           className="calculator-card calculator-card--full"
           initial={{ opacity: 0, y: 20 }}

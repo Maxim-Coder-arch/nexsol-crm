@@ -1,27 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import "../../styles/director/links.scss";
-import TemplateBack from '@/app/components/template/template';
-
-interface Link {
-  _id: string;
-  title: string;
-  description: string;
-  url: string;
-  importance: number;
-  createdAt: string;
-}
+import TemplateBack from "@/app/components/template/template";
+import { Link } from "@/types/directorLink.type";
 
 export default function LinksPage() {
   const [links, setLinks] = useState<Link[]>([]);
-  const [newTitle, setNewTitle] = useState('');
-  const [newDescription, setNewDescription] = useState('');
-  const [newUrl, setNewUrl] = useState('');
+  const [newTitle, setNewTitle] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newUrl, setNewUrl] = useState("");
   const [newImportance, setNewImportance] = useState<number>(3);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchLinks();
@@ -29,11 +21,11 @@ export default function LinksPage() {
 
   const fetchLinks = async () => {
     try {
-      const res = await fetch('/api/director/links');
+      const res = await fetch("/api/director/links");
       const data = await res.json();
       setLinks(data);
-    } catch (err) {
-      setError('Ошибка загрузки ссылок');
+    } catch {
+      setError("Ошибка загрузки ссылок");
     } finally {
       setLoading(false);
     }
@@ -41,80 +33,86 @@ export default function LinksPage() {
 
   const addLink = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!newTitle || !newDescription || !newUrl) {
-      setError('Заполните все поля');
+      setError("Заполните все поля");
       return;
     }
 
     try {
-      const res = await fetch('/api/director/links', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/director/links", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: newTitle.trim(),
           description: newDescription.trim(),
           url: newUrl.trim(),
-          importance: newImportance
-        })
+          importance: newImportance,
+        }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setLinks(prev => [data.link, ...prev]);
-        setNewTitle('');
-        setNewDescription('');
-        setNewUrl('');
+        setLinks((prev) => [data.link, ...prev]);
+        setNewTitle("");
+        setNewDescription("");
+        setNewUrl("");
         setNewImportance(3);
-        setError('');
+        setError("");
       } else {
-        setError(data.error || 'Ошибка при добавлении');
+        setError(data.error || "Ошибка при добавлении");
       }
-    } catch (err) {
-      setError('Ошибка при добавлении');
+    } catch {
+      setError("Ошибка при добавлении");
     }
   };
 
   const deleteLink = async (id: string) => {
-    if (!confirm('Удалить ссылку?')) return;
+    if (!confirm("Удалить ссылку?")) return;
 
     try {
       const res = await fetch(`/api/director/links/${id}`, {
-        method: 'DELETE'
+        method: "DELETE",
       });
 
       if (res.ok) {
-        setLinks(prev => prev.filter(l => l._id !== id));
+        setLinks((prev) => prev.filter((l) => l._id !== id));
       } else {
         const data = await res.json();
-        setError(data.error || 'Ошибка при удалении');
+        setError(data.error || "Ошибка при удалении");
       }
-    } catch (err) {
-      setError('Ошибка при удалении');
+    } catch {
+      setError("Ошибка при удалении");
     }
   };
 
   const openLink = (url: string) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
+    return new Date(date).toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
     });
   };
 
   const getImportanceLabel = (importance: number) => {
-    switch(importance) {
-      case 5: return 'Критично';
-      case 4: return 'Высокая';
-      case 3: return 'Средняя';
-      case 2: return 'Низкая';
-      case 1: return 'Справочно';
-      default: return 'Средняя';
+    switch (importance) {
+      case 5:
+        return "Критично";
+      case 4:
+        return "Высокая";
+      case 3:
+        return "Средняя";
+      case 2:
+        return "Низкая";
+      case 1:
+        return "Справочно";
+      default:
+        return "Средняя";
     }
   };
 
@@ -127,11 +125,10 @@ export default function LinksPage() {
           <p>Полезные ссылки и источники информации</p>
         </div>
 
-        {/* Форма добавления */}
         <div className="links__form-container">
           <form className="links__form" onSubmit={addLink}>
             <h2>Новый источник</h2>
-            
+
             <div className="links__field">
               <label>Название</label>
               <input
@@ -165,11 +162,11 @@ export default function LinksPage() {
             <div className="links__field">
               <label>Важность: {newImportance}/5</label>
               <div className="links__importance-scale">
-                {[1,2,3,4,5].map(level => (
+                {[1, 2, 3, 4, 5].map((level) => (
                   <button
                     key={level}
                     type="button"
-                    className={`links__importance-btn ${level <= newImportance ? 'active' : ''}`}
+                    className={`links__importance-btn ${level <= newImportance ? "active" : ""}`}
                     onClick={() => setNewImportance(level)}
                   >
                     {level}
@@ -184,7 +181,6 @@ export default function LinksPage() {
           </form>
         </div>
 
-        {/* Список ссылок */}
         <div className="links__list">
           {loading ? (
             <div className="links__loading">Загрузка...</div>
@@ -203,7 +199,9 @@ export default function LinksPage() {
                 <div className="links__card-header">
                   <div>
                     <h3 className="links__card-title">{link.title}</h3>
-                    <span className="links__card-date">{formatDate(link.createdAt)}</span>
+                    <span className="links__card-date">
+                      {formatDate(link.createdAt)}
+                    </span>
                   </div>
                   <button
                     className="links__card-delete"
@@ -222,7 +220,9 @@ export default function LinksPage() {
                   >
                     Перейти к источнику →
                   </button>
-                  <span className={`links__card-importance importance-${link.importance}`}>
+                  <span
+                    className={`links__card-importance importance-${link.importance}`}
+                  >
                     {getImportanceLabel(link.importance)}
                   </span>
                 </div>

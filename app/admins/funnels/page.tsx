@@ -3,23 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import "../../styles/funnels/funnels.scss";
-
-interface FunnelStage {
-  id: string;
-  name: string;
-  description: string;
-  order: number;
-  type: 'tofu' | 'mofu' | 'bofu';
-}
-
-interface Funnel {
-  _id: string;
-  name: string;
-  description: string;
-  type: 'sales' | 'attraction' | 'b2b';
-  stages: FunnelStage[];
-  createdAt: string;
-}
+import { FunnelStage, Funnel } from '@/types/funnels.type';
 
 export default function FunnelsPage() {
   const [funnels, setFunnels] = useState<Funnel[]>([]);
@@ -36,7 +20,7 @@ export default function FunnelsPage() {
       const res = await fetch('/api/director/funnels');
       const data = await res.json();
       setFunnels(data);
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки воронок');
     } finally {
       setLoading(false);
@@ -56,15 +40,6 @@ export default function FunnelsPage() {
     }
   };
 
-  const getStageTypeLabel = (type: string) => {
-    switch(type) {
-      case 'tofu': return 'TOFU — Осведомленность';
-      case 'mofu': return 'MOFU — Интерес';
-      case 'bofu': return 'BOFU — Действие';
-      default: return type;
-    }
-  };
-
   const getStageTypeColor = (type: string) => {
     switch(type) {
       case 'tofu': return '#60a5fa';
@@ -74,7 +49,6 @@ export default function FunnelsPage() {
     }
   };
 
-  // Функция для расчета ширины этапов (каждый следующий уже на 5%)
   const getStageWidth = (index: number, total: number) => {
     const baseWidth = 100;
     const decreasePerStep = 5;
@@ -93,7 +67,6 @@ export default function FunnelsPage() {
         <p>Маркетинговые и sales-воронки для стратегического планирования</p>
       </motion.div>
 
-      {/* Фильтр по типам */}
       <div className="funnels-filter">
         <button 
           className={`funnels-filter__btn ${selectedType === 'all' ? 'active' : ''}`}
@@ -121,7 +94,6 @@ export default function FunnelsPage() {
         </button>
       </div>
 
-      {/* Список воронок */}
       <div className="funnels-list">
         {loading ? (
           <div className="funnels-loading">Загрузка воронок...</div>
@@ -156,7 +128,6 @@ export default function FunnelsPage() {
 
               <p className="funnels-item__description">{funnel.description}</p>
 
-              {/* Визуализация воронки */}
               <div className="funnels-visual">
                 {funnel.stages
                   .sort((a, b) => a.order - b.order)
@@ -184,7 +155,6 @@ export default function FunnelsPage() {
                   ))}
               </div>
 
-              {/* Список этапов */}
               <div className="funnels-stages">
                 {funnel.stages
                   .sort((a, b) => a.order - b.order)

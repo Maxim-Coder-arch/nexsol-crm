@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const funnels = await FunnelModel.getAll();
     return NextResponse.json(funnels);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch funnels' },
       { status: 500 }
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     });
     
     return NextResponse.json({ success: true, funnel });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create funnel' },
       { status: 500 }

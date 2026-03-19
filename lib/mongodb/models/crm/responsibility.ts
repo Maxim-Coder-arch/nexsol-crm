@@ -3,8 +3,8 @@ import { ObjectId } from 'mongodb';
 
 export interface Responsibility {
   _id?: ObjectId;
-  assignee: string;      // Кому назначено
-  tasks: string[];       // Список обязанностей
+  assignee: string;
+  tasks: string[];
   createdAt: Date;
   updatedAt: Date;
 }

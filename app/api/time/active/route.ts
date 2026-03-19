@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const active = await TimeModel.getActive();
     return NextResponse.json(active || { active: false });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch active timer' },
       { status: 500 }
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     }
     
     return NextResponse.json({ success: true, entry: stopped });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to stop timer' },
       { status: 500 }

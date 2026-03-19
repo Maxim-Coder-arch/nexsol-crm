@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     
     const note = await NoteModel.create(author, text);
     return NextResponse.json({ success: true, note });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create note' },
       { status: 500 }

@@ -3,15 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import "../../styles/advertisements/advertisements.scss";
-
-interface Announcement {
-  _id: string;
-  author: string;
-  title: string;
-  content: string;
-  importance: number;
-  createdAt: string;
-}
+import { Announcement } from '@/types/announcement.type';
 
 const AdvertisementsPage = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -27,7 +19,7 @@ const AdvertisementsPage = () => {
       const res = await fetch('/api/director/announcements');
       const data = await res.json();
       setAnnouncements(data);
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки объявлений');
     } finally {
       setLoading(false);

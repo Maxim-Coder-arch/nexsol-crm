@@ -3,15 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import "../../styles/responsibilities/responsibilities.scss";
-
-interface User {
-  _id: string;
-  name: string;
-  specialties: string[];
-  responsibilities: string[];
-  role: string;
-  createdAt: string;
-}
+import { User } from '@/types/user.type';
 
 const ResponsibilitiesPage = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -25,22 +17,20 @@ const ResponsibilitiesPage = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch('/api/users'); // получаем всех пользователей
+      const res = await fetch('/api/users');
       const data = await res.json();
       setUsers(data);
-    } catch (err) {
+    } catch {
       setError('Ошибка загрузки сотрудников');
     } finally {
       setLoading(false);
     }
   };
 
-  // Фильтруем пользователей
   const filteredUsers = selectedUser === 'all'
     ? users
     : users.filter(u => u._id === selectedUser);
 
-  // Формируем список для фильтра
   const userOptions = [
     { id: 'all', name: 'Все сотрудники' },
     ...users.map(u => ({ id: u._id, name: u.name }))
@@ -54,15 +44,6 @@ const ResponsibilitiesPage = () => {
     });
   };
 
-  const getRoleLabel = (role: string) => {
-    switch(role) {
-      case 'director': return 'Директор';
-      case 'admin': return 'Администратор';
-      case 'manager': return 'Менеджер';
-      default: return role;
-    }
-  };
-
   return (
     <div className="team-responsibilities">
       <div className="team-responsibilities__header">
@@ -70,7 +51,6 @@ const ResponsibilitiesPage = () => {
         <p>Специальности и задачи сотрудников</p>
       </div>
 
-      {/* Фильтр по сотрудникам */}
       {!loading && users.length > 0 && (
         <div className="team-responsibilities__filter">
           <label>Сотрудник:</label>
@@ -116,7 +96,6 @@ const ResponsibilitiesPage = () => {
                 </span>
               </div>
 
-              {/* Специальности */}
               {user.specialties && user.specialties.length > 0 && (
                 <div className="team-responsibilities__section">
                   <h3>Специальности</h3>
@@ -130,7 +109,6 @@ const ResponsibilitiesPage = () => {
                 </div>
               )}
 
-              {/* Обязанности */}
               {user.responsibilities && user.responsibilities.length > 0 ? (
                 <div className="team-responsibilities__section">
                   <h3>Обязанности</h3>

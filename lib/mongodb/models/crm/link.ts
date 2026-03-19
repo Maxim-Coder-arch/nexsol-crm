@@ -6,7 +6,7 @@ export interface Link {
   title: string;
   description: string;
   url: string;
-  importance: number; // 1-5
+  importance: number;
   createdAt: Date;
   updatedAt: Date;
 }

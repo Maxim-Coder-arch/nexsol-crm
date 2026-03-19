@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const clients = await ClientModel.getAll();
     return NextResponse.json(clients);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch clients' },
       { status: 500 }
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     });
     
     return NextResponse.json({ success: true, client });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create client' },
       { status: 500 }
