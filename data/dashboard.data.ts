@@ -17,6 +17,11 @@ const dashboard: IDashboard[] = [
     link: "/admins/leads",
   },
   {
+    id: "reviews",
+    label: "Отзывы",
+    link: "/admins/reviews",
+  },
+  {
     id: "ai",
     label: "Быстрый чат с ai",
     link: "/admins/nexsol-ai",
