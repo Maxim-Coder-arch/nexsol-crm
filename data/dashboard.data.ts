@@ -89,7 +89,7 @@ const dashboard: IDashboard[] = [
   {
     id: 'website',
     label: "Перейти на сайт nexsol",
-    link: "https://nexsol.vercel.app/",
+    link: "https://nexsol.ru",
   },
   {
     id: 'director',

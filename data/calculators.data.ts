@@ -1,24 +1,24 @@
 export const servicesData = [
   { id: 'prep', name: 'Изучение ниши и подготовка', baseDays: 1, description: 'Анализ рынка и конкурентов' },
-  { id: 'social', name: 'Реклама в соцсетях', baseDays: 2, description: 'Настройка и ведение таргета' },
-  { id: 'landing', name: 'Разработка лендинга', baseDays: 3, description: 'Одностраничный сайт' },
-  { id: 'roadmap', name: 'Построение роадмапов', baseDays: 1, description: 'Стратегия развития' },
-  { id: 'funnel', name: 'Воронки продаж', baseDays: 2, description: 'Маркетинговые и sales-воронки' },
-  { id: 'strategy', name: 'Индивидуальная стратегия', baseDays: 4, description: 'Комплексный план развития' },
-  { id: 'complex', name: 'Сложный сайт', baseDays: 7, description: 'кастомное решение' },
+  { id: 'socials', name: 'Настройка соц сетей', baseDays: 1, description: 'Тг каналы, вк сообщество, оформление и т.п.' },
+  { id: 'setMarketingServices', name: 'Настройка сервисов для рекламы', baseDays: 3, description: 'Яндекс директ, вк реклама, тг каналы и т.п.' },
+  { id: 'landing', name: 'Настройка и доработка лендинга + cms', baseDays: 2, description: 'Настройка шаблонного лендинга и cms под клиента' },
+  { id: 'corporative', name: 'Настройка и доработка корпоративного сайта + cms', baseDays: 3, description: 'Настройка шаблонного лендинга и cms под клиента' },
+  { id: 'techServices', name: 'Настройка и подключение технических сервисов', baseDays: 1, description: 'Подключение аналитики, хостинг, бд (если надо)' },
+  { id: 'test', name: 'Тестирование', baseDays: 1, description: 'Тестирование сервисов, сайта' },
+  { id: 'includeDomain', name: 'Доменное имя', baseDays: 1, description: 'Подключение доменного имени к сайту' },
+  { id: 'strategy', name: 'Микростратегия и реклама', baseDays: 3, description: 'Разработка микростратегии и дизайна для рекламы в соц сетях' },
 ];
 
 export const priceServicesData = [
-  { id: 'analytics', name: 'Отчеты и аналитика', price: 1000, unit: '₽' },
-  { id: 'roadmap', name: 'Проектирование роадмапов', price: 5000, unit: '₽' },
-  { id: 'funnel', name: 'Построение воронок', price: 2000, unit: '₽' },
-  { id: 'social', name: 'Ведение соцсетей', price: 2000, unit: '₽ / неделя' },
-  { id: 'marketing', name: 'Маркетинг, реклама и анализ конкурентов', price: 7000, unit: '₽ + сервисы' },
-  { id: 'scripts', name: 'Проектирование текстовых скриптов', price: 1000, unit: '₽' },
-  { id: 'landing', name: 'Разработка лендинга', price: 10000, unit: '₽' },
-  { id: 'seo', name: 'SEO продвижение лендинга', price: 5000, unit: '₽ + сервисы' },
-  { id: 'complex', name: 'Сложные сайты', price: 15000, unit: '₽' },
-  { id: 'support', name: 'Поддержка технической части', price: 500, unit: '₽ / неделя' },
+  { id: 'templateLanding', name: 'Шаблонный лендинг + cms', price: 5000, unit: '₽' },
+  { id: 'templateCorporateSite', name: 'Корпоративный сайт + cms', price: 15000, unit: '₽' },
+  { id: 'advertising', name: 'Настройка сервисов рекламы', price: 5000, unit: '₽' },
+  { id: 'socialAdvertising', name: 'Ведение рекламы в соц сетях', price: 2000, unit: '₽ / неделя' },
+  { id: 'socials', name: 'Ведение соц сетей', price: 2500, unit: '₽ / неделя' },
+  { id: 'setTechServices', name: 'Настройка технических сервисов', price: 3000, unit: '₽' },
+  { id: 'baseSeo', name: 'Базовое сео продвижение сайта', price: 5000, unit: '₽' },
+  { id: 'concurencyAnalitics', name: 'Быстрый анализ конкурентов', price: 1000, unit: '₽ + сервисы' },
 ];
 
 export const initialIncomeItems = [
